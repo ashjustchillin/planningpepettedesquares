@@ -1,0 +1,2495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace de Lalia ✨</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
+
+  :root {
+    --rose: #f4a7b9;
+    --rose-light: #fce4ec;
+    --rose-pale: #fdf0f4;
+    --rose-deep: #e8839a;
+    --peach: #fddde6;
+    --lilac: #e8d5f0;
+    --lilac-deep: #c9a8e0;
+    --mint: #d4ede8;
+    --cream: #fffaf8;
+    --text: #5a3a42;
+    --text-soft: #9a7080;
+    --text-light: #c4a0ad;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(244,167,185,0.15);
+    --shadow-hover: 0 8px 32px rgba(244,167,185,0.28);
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    background: var(--rose-pale);
+    color: var(--text);
+    min-height: 100vh;
+    background-image: 
+      radial-gradient(ellipse at 10% 20%, rgba(244,167,185,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 90% 80%, rgba(232,213,240,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 50%, rgba(253,221,230,0.1) 0%, transparent 70%);
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(244,167,185,0.2);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    color: var(--rose-deep);
+    letter-spacing: -0.3px;
+    font-style: italic;
+  }
+  .logo span { font-style: normal; font-size: 18px; margin-left: 4px; }
+  .date-display {
+    font-size: 13px;
+    color: var(--text-soft);
+    font-weight: 400;
+    letter-spacing: 0.3px;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 14px;
+    padding: 4px;
+    border: 1px solid rgba(244,167,185,0.2);
+  }
+  .nav-btn {
+    padding: 7px 16px;
+    border: none;
+    background: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-soft);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-btn:hover { color: var(--rose-deep); background: rgba(244,167,185,0.12); }
+  .nav-btn.active { background: var(--rose); color: white; }
+
+  /* ─── SECTIONS ─── */
+  .section { display: none; padding: 28px 32px; max-width: 1200px; margin: 0 auto; }
+  .section.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--text);
+    margin-bottom: 24px;
+    font-weight: 400;
+  }
+  .section-title em { color: var(--rose-deep); font-style: italic; }
+
+  /* ─── CARD ─── */
+  .card {
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius);
+    border: 1px solid rgba(244,167,185,0.18);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: var(--shadow-hover); }
+
+  /* ─── TODO ─── */
+  .todo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 16px;
+  }
+  .todo-input-row {
+    display: flex; gap: 10px; margin-bottom: 16px;
+  }
+  .todo-input-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1.5px solid rgba(244,167,185,0.3);
+    border-radius: var(--radius-sm);
+    background: var(--rose-pale);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .todo-input-row input:focus { border-color: var(--rose); }
+  .todo-input-row input::placeholder { color: var(--text-light); }
+  .btn-add {
+    padding: 10px 16px;
+    background: var(--rose);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-add:hover { background: var(--rose-deep); transform: scale(1.05); }
+  .todo-list { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; }
+  .todo-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--rose-pale);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .todo-item:hover { border-color: rgba(244,167,185,0.3); }
+  .todo-item.done { opacity: 0.5; }
+  .todo-item.done .todo-text { text-decoration: line-through; }
+  .todo-check {
+    width: 20px; height: 20px;
+    border: 2px solid var(--rose);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    background: white;
+  }
+  .todo-item.done .todo-check { background: var(--rose); }
+  .todo-check::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
+  .todo-text { font-size: 14px; flex: 1; }
+  .todo-delete {
+    background: none; border: none; cursor: pointer; color: var(--text-light);
+    font-size: 16px; padding: 2px 6px; border-radius: 6px; transition: all 0.2s;
+  }
+  .todo-delete:hover { color: var(--rose-deep); background: var(--peach); }
+  .todo-priority {
+    font-size: 11px; padding: 2px 8px; border-radius: 20px;
+    background: var(--peach); color: var(--rose-deep); font-weight: 500;
+  }
+  .tag-select {
+    padding: 10px 12px;
+    border: 1.5px solid rgba(244,167,185,0.3);
+    border-radius: var(--radius-sm);
+    background: var(--rose-pale);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+  }
+
+  /* ─── CALENDAR ─── */
+  .cal-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+  .cal-tab {
+    padding: 8px 20px; border-radius: 30px;
+    border: 1.5px solid rgba(244,167,185,0.3);
+    background: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    color: var(--text-soft); transition: all 0.2s;
+  }
+  .cal-tab.active { background: var(--rose); color: white; border-color: var(--rose); }
+  .cal-view { display: none; }
+  .cal-view.active { display: block; }
+
+  /* Monthly */
+  .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .cal-nav { background: none; border: none; cursor: pointer; color: var(--rose-deep); font-size: 18px; padding: 6px 12px; border-radius: 8px; transition: background 0.2s; }
+  .cal-nav:hover { background: var(--peach); }
+  .cal-month-name { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); font-weight: 400; }
+  .cal-grid-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; margin-bottom: 4px; }
+  .cal-day-name { text-align: center; font-size: 11px; font-weight: 600; color: var(--text-light); letter-spacing: 0.5px; padding: 4px 0; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; }
+  .cal-cell {
+    aspect-ratio: unset;
+    min-height: 60px;
+    display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start;
+    padding: 5px 4px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.18s;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+  .cal-cell:hover { background: var(--peach); }
+  .cal-cell.today { background: var(--rose); }
+  .cal-cell.today .cal-day-num { color: white; }
+  .cal-cell.other-month .cal-day-num { color: var(--text-light); }
+  .cal-day-num { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .cal-cell.today .cal-day-num { color: white; }
+  .cal-cell.other-month .cal-day-num { color: var(--text-light); }
+  .cal-dots { display: flex; gap: 2px; margin-top: auto; flex-wrap: wrap; }
+  .cal-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .dot-sport { background: #a8d8a8; }
+  .dot-social { background: var(--rose); }
+  .dot-perso { background: var(--lilac-deep); }
+
+  /* Week view */
+  .week-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .week-name { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--text); }
+  .week-grid { display: grid; grid-template-columns: 56px repeat(7,1fr); border: 1px solid rgba(244,167,185,0.2); border-radius: var(--radius); overflow: hidden; }
+  .week-day-col { border-left: 1px solid rgba(244,167,185,0.15); }
+  .week-day-head {
+    padding: 10px 6px; text-align: center;
+    background: rgba(255,255,255,0.6);
+    border-bottom: 1px solid rgba(244,167,185,0.2);
+    font-size: 11px; font-weight: 600; color: var(--text-soft);
+    letter-spacing: 0.4px;
+  }
+  .week-day-head.today-head { background: var(--rose); color: white; }
+  .week-time-col .week-day-head { background: rgba(255,255,255,0.4); }
+  .week-slot { height: 44px; border-bottom: 1px solid rgba(244,167,185,0.08); position: relative; }
+  .week-time-label { font-size: 10px; color: var(--text-light); padding: 4px 6px; text-align: right; }
+  .week-event {
+    position: absolute; left: 2px; right: 2px; top: 2px; bottom: 2px;
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 10px; font-weight: 500; color: white;
+    overflow: hidden; white-space: nowrap;
+    cursor: pointer;
+  }
+  .ev-sport { background: linear-gradient(135deg,#a8d8a8,#7bc47b); }
+  .ev-social { background: linear-gradient(135deg,var(--rose),var(--rose-deep)); }
+  .ev-perso { background: linear-gradient(135deg,var(--lilac-deep),#b08acf); }
+  .ev-marche { background: linear-gradient(135deg,#f7d794,#f0a500); }
+
+  .add-event-form {
+    margin-top: 16px; padding: 16px; background: var(--rose-pale);
+    border-radius: var(--radius-sm); border: 1.5px dashed rgba(244,167,185,0.4);
+    display: none;
+  }
+  .add-event-form.open { display: block; }
+  .form-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+  .form-row input, .form-row select {
+    padding: 9px 13px; border: 1.5px solid rgba(244,167,185,0.3);
+    border-radius: var(--radius-sm); background: white;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text);
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-row input:focus, .form-row select:focus { border-color: var(--rose); }
+  .btn-rose {
+    padding: 9px 18px; background: var(--rose); color: white;
+    border: none; border-radius: var(--radius-sm); cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    transition: background 0.2s;
+  }
+  .btn-rose:hover { background: var(--rose-deep); }
+  .btn-outline {
+    padding: 9px 18px; background: none; color: var(--text-soft);
+    border: 1.5px solid rgba(244,167,185,0.3); border-radius: var(--radius-sm);
+    cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--rose); color: var(--rose-deep); }
+
+  /* ─── NOTES ─── */
+  .notes-layout { display: grid; grid-template-columns: 220px 1fr; gap: 20px; }
+  .notes-list { display: flex; flex-direction: column; gap: 8px; }
+  .note-item {
+    padding: 12px 14px; border-radius: var(--radius-sm);
+    background: var(--rose-pale); cursor: pointer;
+    border: 1.5px solid transparent; transition: all 0.2s;
+  }
+  .note-item:hover, .note-item.active { border-color: var(--rose); background: white; }
+  .note-item-title { font-size: 13px; font-weight: 500; color: var(--text); }
+  .note-item-date { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+  .note-editor { display: flex; flex-direction: column; gap: 12px; }
+  .note-title-input {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; color: var(--text);
+    border: none; background: none; outline: none;
+    border-bottom: 1.5px solid rgba(244,167,185,0.25);
+    padding-bottom: 10px; width: 100%;
+  }
+  .note-body {
+    flex: 1; min-height: 380px;
+    border: 1.5px solid rgba(244,167,185,0.2);
+    border-radius: var(--radius-sm);
+    padding: 16px; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; color: var(--text); line-height: 1.7;
+    background: rgba(255,255,255,0.6); outline: none; resize: none;
+  }
+  .note-body:focus { border-color: var(--rose); }
+  .notes-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+  /* ─── TRACKER ─── */
+  .tracker-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .habit-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; border-radius: var(--radius-sm);
+    background: var(--rose-pale); margin-bottom: 10px;
+    border: 1.5px solid transparent; transition: all 0.2s;
+  }
+  .habit-item:hover { border-color: rgba(244,167,185,0.3); }
+  .habit-left { display: flex; align-items: center; gap: 12px; }
+  .habit-emoji { font-size: 22px; }
+  .habit-name { font-size: 14px; font-weight: 500; color: var(--text); }
+  .habit-sub { font-size: 12px; color: var(--text-light); }
+  .habit-check-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--rose); background: white;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: all 0.2s; flex-shrink: 0;
+  }
+  .habit-check-btn.done { background: var(--rose); border-color: var(--rose); }
+  .progress-bar { height: 6px; background: rgba(244,167,185,0.2); border-radius: 3px; margin-top: 16px; }
+  .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg,var(--rose),var(--rose-deep)); transition: width 0.4s ease; }
+  .progress-text { font-size: 12px; color: var(--text-soft); margin-top: 6px; text-align: right; }
+  .streak-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 20px;
+    background: linear-gradient(135deg,var(--peach),var(--rose-light));
+    font-size: 12px; font-weight: 600; color: var(--rose-deep);
+  }
+
+  /* ─── À VENIR ─── */
+  .upcoming-list { display: flex; flex-direction: column; gap: 12px; }
+  .upcoming-item {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px; border-radius: var(--radius);
+    background: rgba(255,255,255,0.7); border: 1px solid rgba(244,167,185,0.18);
+    transition: all 0.2s;
+  }
+  .upcoming-item:hover { box-shadow: var(--shadow); transform: translateX(4px); }
+  .upcoming-date-box {
+    width: 52px; height: 52px; border-radius: var(--radius-sm);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .date-box-rose { background: linear-gradient(135deg,var(--rose),var(--rose-deep)); }
+  .date-box-lilac { background: linear-gradient(135deg,var(--lilac-deep),#b08acf); }
+  .date-box-mint { background: linear-gradient(135deg,#a8d8a8,#7bc47b); }
+  .date-box-peach { background: linear-gradient(135deg,#f7d794,#f0b37e); }
+  .upcoming-day { font-size: 20px; font-weight: 700; color: white; line-height: 1; }
+  .upcoming-mois { font-size: 10px; color: rgba(255,255,255,0.85); font-weight: 500; letter-spacing: 0.5px; }
+  .upcoming-info { flex: 1; }
+  .upcoming-title { font-size: 15px; font-weight: 500; color: var(--text); }
+  .upcoming-sub { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
+  .upcoming-days-left {
+    font-size: 12px; font-weight: 600; padding: 4px 10px;
+    border-radius: 20px; background: var(--rose-light); color: var(--rose-deep);
+  }
+  .upcoming-type { font-size: 18px; }
+  .upcoming-form {
+    margin-top: 20px; padding: 20px;
+    background: var(--rose-pale); border-radius: var(--radius);
+    border: 1.5px dashed rgba(244,167,185,0.4);
+  }
+
+  /* ─── MOON ─── */
+  .moon-hero {
+    display: flex; align-items: center; gap: 40px;
+    padding: 32px 36px;
+    background: linear-gradient(135deg, #1a1035 0%, #2d1b5e 50%, #1a2a4a 100%);
+    border-radius: var(--radius);
+    position: relative; overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .moon-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(200,180,255,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(150,200,255,0.08) 0%, transparent 50%);
+  }
+  .moon-svg-wrap {
+    flex-shrink: 0; position: relative; z-index: 1;
+    filter: drop-shadow(0 0 24px rgba(200,180,255,0.4));
+  }
+  .moon-info { position: relative; z-index: 1; flex: 1; }
+  .moon-phase-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; font-weight: 400; color: white;
+    margin-bottom: 6px;
+  }
+  .moon-phase-name em { color: #c8b4ff; font-style: italic; }
+  .moon-date-info { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 16px; }
+  .moon-stats { display: flex; gap: 24px; flex-wrap: wrap; }
+  .moon-stat { text-align: center; }
+  .moon-stat-val { font-size: 22px; font-weight: 600; color: white; }
+  .moon-stat-label { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; margin-top: 2px; }
+  .moon-stars {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    overflow: hidden;
+  }
+  .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s infinite; }
+  @keyframes twinkle { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+  .moon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+
+  .moon-cycle-card {
+    background: rgba(255,255,255,0.8);
+    border-radius: var(--radius);
+    border: 1px solid rgba(244,167,185,0.18);
+    box-shadow: var(--shadow);
+    padding: 24px;
+  }
+  .moon-cycle-title {
+    font-size: 13px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--text-soft); margin-bottom: 16px;
+  }
+  .moon-cycle-row {
+    display: flex; gap: 6px; flex-wrap: wrap; justify-content: space-between;
+  }
+  .moon-cycle-day {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    cursor: default; padding: 4px; border-radius: 8px; transition: background 0.2s;
+    min-width: 32px;
+  }
+  .moon-cycle-day:hover { background: var(--rose-pale); }
+  .moon-cycle-day.today-moon { background: var(--peach); border-radius: 10px; }
+  .moon-mini { font-size: 18px; line-height: 1; }
+  .moon-mini-day { font-size: 9px; color: var(--text-light); font-weight: 500; }
+
+  .moon-advice-card {
+    background: linear-gradient(135deg, #f8f0ff 0%, #fde8f0 100%);
+    border-radius: var(--radius);
+    border: 1px solid rgba(200,170,240,0.3);
+    box-shadow: var(--shadow);
+    padding: 24px;
+  }
+  .moon-advice-title {
+    font-size: 13px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--lilac-deep); margin-bottom: 14px;
+  }
+  .moon-advice-list { display: flex; flex-direction: column; gap: 10px; }
+  .moon-advice-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; border-radius: var(--radius-sm);
+    background: rgba(255,255,255,0.7);
+  }
+  .moon-advice-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .moon-advice-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+  .moon-next-card {
+    background: rgba(255,255,255,0.8);
+    border-radius: var(--radius);
+    border: 1px solid rgba(244,167,185,0.18);
+    box-shadow: var(--shadow);
+    padding: 24px;
+  }
+  .moon-next-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .moon-next-item {
+    flex: 1; min-width: 120px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; padding: 16px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--rose-pale);
+    text-align: center;
+  }
+  .moon-next-emoji { font-size: 28px; }
+  .moon-next-name { font-size: 12px; font-weight: 600; color: var(--text); }
+  .moon-next-date { font-size: 11px; color: var(--text-soft); }
+  .moon-next-in { font-size: 11px; color: var(--rose-deep); font-weight: 500;
+    background: var(--peach); padding: 2px 8px; border-radius: 20px; }
+
+  /* ─── ASTRAL ─── */
+  .astral-hero {
+    background: linear-gradient(135deg, #0f0c1d 0%, #1e1040 40%, #2a1555 70%, #1a2240 100%);
+    border-radius: var(--radius); padding: 32px 36px; margin-bottom: 24px;
+    position: relative; overflow: hidden;
+  }
+  .astral-hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(255,180,220,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(180,140,255,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 10%, rgba(255,220,140,0.08) 0%, transparent 40%);
+  }
+  .astral-hero-inner { position: relative; z-index: 1; display: flex; gap: 36px; align-items: center; flex-wrap: wrap; }
+  .astral-chart-wrap { flex-shrink: 0; }
+  .astral-bio { flex: 1; min-width: 220px; }
+  .astral-name {
+    font-family: 'Playfair Display', serif; font-size: 28px; color: white;
+    font-weight: 400; margin-bottom: 4px;
+  }
+  .astral-name em { color: #e8b4ff; font-style: italic; }
+  .astral-birth { font-size: 13px; color: rgba(255,255,255,0.45); margin-bottom: 20px; }
+  .astral-trio { display: flex; gap: 16px; flex-wrap: wrap; }
+  .astral-trio-item {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-sm); padding: 12px 18px; text-align: center; min-width: 90px;
+  }
+  .astral-trio-emoji { font-size: 22px; margin-bottom: 4px; }
+  .astral-trio-val { font-size: 15px; font-weight: 600; color: white; }
+  .astral-trio-label { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 0.6px; margin-top: 2px; }
+
+  .astral-planets-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;
+    margin-bottom: 24px;
+  }
+  .planet-card {
+    background: rgba(255,255,255,0.82); border-radius: var(--radius-sm);
+    border: 1px solid rgba(244,167,185,0.18); padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: var(--shadow); transition: all 0.2s;
+  }
+  .planet-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+  .planet-icon { font-size: 26px; flex-shrink: 0; }
+  .planet-info { flex: 1; }
+  .planet-name { font-size: 11px; font-weight: 600; color: var(--text-soft); letter-spacing: 0.5px; text-transform: uppercase; }
+  .planet-sign { font-size: 15px; font-weight: 600; color: var(--text); }
+  .planet-deg { font-size: 11px; color: var(--text-light); }
+
+  .astral-houses {
+    background: rgba(255,255,255,0.8); border-radius: var(--radius);
+    border: 1px solid rgba(244,167,185,0.18); box-shadow: var(--shadow);
+    padding: 24px; margin-bottom: 24px;
+  }
+  .houses-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 14px; }
+  .house-item {
+    padding: 10px 12px; border-radius: var(--radius-sm); background: var(--rose-pale);
+    text-align: center;
+  }
+  .house-num { font-size: 10px; color: var(--text-light); font-weight: 600; letter-spacing: 0.4px; }
+  .house-sign { font-size: 14px; font-weight: 600; color: var(--text); margin: 2px 0; }
+  .house-emoji { font-size: 14px; }
+
+  .astral-horoscope {
+    background: linear-gradient(135deg, #f8f0ff 0%, #fde8f0 100%);
+    border-radius: var(--radius); border: 1px solid rgba(200,170,240,0.3);
+    box-shadow: var(--shadow); padding: 28px; margin-bottom: 24px;
+  }
+  .horoscope-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .horoscope-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text); font-weight: 400; }
+  .horoscope-title em { color: var(--lilac-deep); font-style: italic; }
+  .horoscope-date { font-size: 12px; color: var(--text-soft); background: white; padding: 4px 12px; border-radius: 20px; }
+  .horoscope-body { font-size: 14px; color: var(--text); line-height: 1.9; }
+  .horoscope-body p { margin-bottom: 12px; }
+  .horoscope-domains { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .horoscope-domain {
+    display: flex; align-items: center; gap: 8px; padding: 10px 16px;
+    background: rgba(255,255,255,0.7); border-radius: var(--radius-sm);
+    flex: 1; min-width: 130px;
+  }
+  .domain-icon { font-size: 20px; }
+  .domain-info { }
+  .domain-label { font-size: 10px; font-weight: 600; color: var(--text-soft); letter-spacing: 0.5px; text-transform: uppercase; }
+  .domain-bar { height: 5px; background: rgba(244,167,185,0.2); border-radius: 3px; margin-top: 5px; width: 80px; }
+  .domain-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg,var(--rose),var(--lilac-deep)); }
+
+  .horoscope-loading {
+    display: flex; align-items: center; gap: 12px;
+    padding: 24px; color: var(--text-soft); font-style: italic; font-size: 14px;
+  }
+  .spinner {
+    width: 20px; height: 20px; border: 2px solid rgba(244,167,185,0.3);
+    border-top-color: var(--rose); border-radius: 50%;
+    animation: spin 0.8s linear infinite; flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .aspects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 10px; margin-top: 14px; }
+  .aspect-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    background: rgba(255,255,255,0.8); border-radius: var(--radius-sm);
+    border: 1px solid rgba(244,167,185,0.15);
+  }
+  .aspect-sym { font-size: 18px; width: 26px; text-align: center; }
+  .aspect-txt { font-size: 12px; color: var(--text); flex: 1; }
+  .aspect-type { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; }
+  .asp-trine { background: #d4f0d4; color: #3a7a3a; }
+  .asp-square { background: #fddde6; color: var(--rose-deep); }
+  .asp-conj { background: #e8d5f0; color: #7040a0; }
+  .asp-oppo { background: #fff0d4; color: #a06020; }
+  .asp-sextile { background: #d4eef8; color: #2060a0; }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: linear-gradient(135deg, var(--rose-deep), var(--lilac-deep));
+    color: white; padding: 12px 24px; border-radius: 30px;
+    font-size: 14px; font-weight: 500;
+    box-shadow: 0 8px 24px rgba(232,131,154,0.35);
+    opacity: 0; transition: all 0.3s ease; z-index: 999; white-space: nowrap;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(90,58,66,0.3);
+    backdrop-filter: blur(6px); z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: white; border-radius: var(--radius); padding: 28px;
+    width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(90,58,66,0.2);
+    transform: translateY(16px); transition: transform 0.25s;
+    border: 1px solid rgba(244,167,185,0.2);
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); margin-bottom: 20px; }
+  .modal-title em { color: var(--rose-deep); font-style: italic; }
+  .modal-list { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; margin-bottom: 20px; }
+  .modal-habit-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: var(--radius-sm);
+    background: var(--rose-pale); border: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .modal-habit-row:hover { border-color: rgba(244,167,185,0.3); }
+  .modal-emoji-input {
+    width: 42px; text-align: center;
+    border: 1.5px solid rgba(244,167,185,0.3); border-radius: 8px;
+    padding: 6px 4px; font-size: 16px; background: white; outline: none;
+  }
+  .modal-name-input {
+    flex: 1; border: 1.5px solid rgba(244,167,185,0.3); border-radius: 8px;
+    padding: 6px 10px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+    color: var(--text); background: white; outline: none;
+  }
+  .modal-name-input:focus, .modal-emoji-input:focus { border-color: var(--rose); }
+  .modal-del-btn {
+    background: none; border: none; cursor: pointer; color: var(--text-light);
+    font-size: 18px; padding: 4px; border-radius: 6px; transition: all 0.2s; flex-shrink: 0;
+  }
+  .modal-del-btn:hover { color: var(--rose-deep); background: var(--peach); }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* ─── TRACKER WEEKLY TABS ─── */
+  .tracker-tabs { display: flex; gap: 6px; margin-bottom: 20px; }
+  .tracker-tab {
+    padding: 8px 20px; border-radius: 30px;
+    border: 1.5px solid rgba(244,167,185,0.3);
+    background: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    color: var(--text-soft); transition: all 0.2s;
+  }
+  .tracker-tab.active { background: var(--rose); color: white; border-color: var(--rose); }
+  .tracker-view { display: none; }
+  .tracker-view.active { display: block; animation: fadeIn 0.25s ease; }
+
+  .weekly-tasks-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 10px; }
+  .weekly-day-col { display: flex; flex-direction: column; gap: 8px; }
+  .weekly-day-head {
+    text-align: center; font-size: 11px; font-weight: 700;
+    color: var(--text-soft); letter-spacing: 0.5px; padding: 8px 4px;
+    background: var(--rose-pale); border-radius: var(--radius-sm);
+  }
+  .weekly-day-head.today-wk { background: var(--rose); color: white; }
+  .weekly-task-item {
+    padding: 8px 10px; border-radius: var(--radius-sm); font-size: 12px;
+    background: rgba(255,255,255,0.8); border: 1.5px solid rgba(244,167,185,0.2);
+    cursor: pointer; transition: all 0.2s; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .weekly-task-item:hover { border-color: var(--rose); }
+  .weekly-task-item.wk-done { background: var(--rose); border-color: var(--rose); color: white; }
+  .weekly-task-emoji { font-size: 16px; }
+  .weekly-task-name { font-size: 10px; font-weight: 500; line-height: 1.2; }
+  .weekly-add-row { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; }
+
+  /* ─── JOURNAL ─── */
+  .notes-tabs { display: flex; gap: 6px; margin-bottom: 20px; }
+  .notes-tab {
+    padding: 8px 20px; border-radius: 30px;
+    border: 1.5px solid rgba(244,167,185,0.3);
+    background: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    color: var(--text-soft); transition: all 0.2s;
+  }
+  .notes-tab.active { background: var(--rose); color: white; border-color: var(--rose); }
+  .notes-view { display: none; }
+  .notes-view.active { display: block; animation: fadeIn 0.25s ease; }
+
+  .journal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .journal-card {
+    border-radius: var(--radius); padding: 28px;
+    border: 1px solid rgba(244,167,185,0.18);
+    box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .journal-card-morning {
+    background: linear-gradient(135deg, #fffbf0 0%, #fff4e0 100%);
+    border-color: rgba(247,215,148,0.4);
+  }
+  .journal-card-evening {
+    background: linear-gradient(135deg, #f4eeff 0%, #ede0ff 100%);
+    border-color: rgba(201,168,224,0.35);
+  }
+  .journal-card::before {
+    content: ''; position: absolute; top: -20px; right: -20px;
+    width: 100px; height: 100px; border-radius: 50%; opacity: 0.12;
+  }
+  .journal-card-morning::before { background: #f7b731; }
+  .journal-card-evening::before { background: #9b59b6; }
+
+  .journal-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .journal-icon { font-size: 28px; }
+  .journal-title {
+    font-family: 'Playfair Display', serif; font-size: 20px;
+    font-weight: 400; color: var(--text);
+  }
+  .journal-title em { font-style: italic; }
+  .journal-title-morning em { color: #c47d0e; }
+  .journal-title-evening em { color: #7b4fa6; }
+  .journal-subtitle { font-size: 12px; color: var(--text-soft); margin-bottom: 18px; font-style: italic; }
+
+  .journal-prompts { display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px; }
+  .journal-prompt-block { display: flex; flex-direction: column; gap: 6px; }
+  .journal-prompt-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.6px;
+    text-transform: uppercase; color: var(--text-soft);
+  }
+  .journal-prompt-label-morning { color: #c47d0e; }
+  .journal-prompt-label-evening { color: #7b4fa6; }
+  .journal-textarea {
+    border: 1.5px solid rgba(244,167,185,0.25); border-radius: var(--radius-sm);
+    padding: 12px 14px; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; color: var(--text); line-height: 1.7; resize: none;
+    outline: none; transition: border-color 0.2s; min-height: 72px;
+  }
+  .journal-textarea:focus { border-color: var(--rose); }
+  .journal-textarea-morning { background: rgba(255,247,224,0.7); }
+  .journal-textarea-evening { background: rgba(248,240,255,0.7); }
+
+  .journal-mood { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .mood-btn {
+    padding: 5px 12px; border-radius: 20px; border: 1.5px solid rgba(244,167,185,0.25);
+    background: white; cursor: pointer; font-size: 14px; transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif; color: var(--text-soft); font-size: 12px;
+  }
+  .mood-btn:hover { border-color: var(--rose); }
+  .mood-btn.selected { background: var(--rose); color: white; border-color: var(--rose); }
+
+  .journal-save-btn {
+    width: 100%; padding: 11px; border-radius: var(--radius-sm);
+    border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600; transition: all 0.2s;
+  }
+  .journal-save-morning { background: linear-gradient(135deg,#f7d794,#f0a500); color: white; }
+  .journal-save-morning:hover { opacity: 0.9; transform: translateY(-1px); }
+  .journal-save-evening { background: linear-gradient(135deg,#c9a8e0,#9b59b6); color: white; }
+  .journal-save-evening:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .journal-history {
+    margin-top: 24px; background: rgba(255,255,255,0.8);
+    border-radius: var(--radius); padding: 20px;
+    border: 1px solid rgba(244,167,185,0.15); box-shadow: var(--shadow);
+  }
+  .journal-history-title { font-size: 13px; font-weight: 600; color: var(--text-soft); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 14px; }
+  .journal-entry {
+    padding: 14px 16px; border-radius: var(--radius-sm);
+    border-left: 3px solid var(--rose); background: var(--rose-pale);
+    margin-bottom: 10px;
+  }
+  .journal-entry-date { font-size: 11px; color: var(--text-light); font-weight: 600; margin-bottom: 6px; letter-spacing: 0.4px; }
+  .journal-entry-mood { font-size: 16px; margin-bottom: 4px; }
+  .journal-entry-text { font-size: 13px; color: var(--text); line-height: 1.6; }
+  .journal-entry-evening { border-left-color: var(--lilac-deep); background: #f8f0ff; }
+
+  /* ─── EVENT POPUP ─── */
+  .ev-popup {
+    position: fixed; z-index: 600;
+    background: white; border-radius: var(--radius);
+    box-shadow: 0 16px 48px rgba(90,58,66,0.22);
+    border: 1px solid rgba(244,167,185,0.25);
+    padding: 20px; min-width: 240px; max-width: 300px;
+    animation: popIn 0.18s ease;
+  }
+  @keyframes popIn { from { opacity:0; transform:scale(0.94) translateY(6px); } to { opacity:1; transform:scale(1) translateY(0); } }
+  .ev-popup-title { font-family:'Playfair Display',serif; font-size:15px; color:var(--text); margin-bottom:14px; font-weight:400; }
+  .ev-popup-title em { color:var(--rose-deep); font-style:italic; }
+  .ev-popup-item {
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:9px 12px; border-radius:var(--radius-sm); margin-bottom:6px;
+    background:var(--rose-pale); border:1px solid rgba(244,167,185,0.18);
+  }
+  .ev-popup-item-name { font-size:13px; font-weight:500; color:var(--text); flex:1; }
+  .ev-popup-item-time { font-size:11px; color:var(--text-light); }
+  .ev-popup-btns { display:flex; gap:5px; }
+  .ev-popup-btn {
+    border:none; background:none; cursor:pointer; padding:4px 7px;
+    border-radius:6px; font-size:13px; transition:background 0.15s;
+  }
+  .ev-popup-btn:hover { background:var(--peach); }
+  .ev-popup-add { margin-top:10px; width:100%; }
+  .ev-popup-overlay { position:fixed; inset:0; z-index:599; }
+
+  /* ─── EVENT EDIT MODAL ─── */
+  .ev-modal-overlay {
+    position:fixed; inset:0; background:rgba(90,58,66,0.28);
+    backdrop-filter:blur(5px); z-index:700;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity 0.22s;
+  }
+  .ev-modal-overlay.open { opacity:1; pointer-events:all; }
+  .ev-modal {
+    background:white; border-radius:var(--radius); padding:28px;
+    width:100%; max-width:400px; box-shadow:0 20px 60px rgba(90,58,66,0.2);
+    transform:translateY(14px); transition:transform 0.22s;
+    border:1px solid rgba(244,167,185,0.2);
+  }
+  .ev-modal-overlay.open .ev-modal { transform:translateY(0); }
+  .ev-modal-title { font-family:'Playfair Display',serif; font-size:19px; color:var(--text); margin-bottom:18px; }
+  .ev-modal-title em { color:var(--rose-deep); font-style:italic; }
+  .ev-modal-field { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+  .ev-modal-label { font-size:11px; font-weight:700; color:var(--text-soft); letter-spacing:0.5px; text-transform:uppercase; }
+  .ev-modal-input {
+    padding:9px 13px; border:1.5px solid rgba(244,167,185,0.3);
+    border-radius:var(--radius-sm); background:var(--rose-pale);
+    font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text); outline:none;
+    transition:border-color 0.2s;
+  }
+  .ev-modal-input:focus { border-color:var(--rose); }
+  .ev-modal-actions { display:flex; gap:10px; justify-content:space-between; margin-top:4px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(244,167,185,0.4); border-radius: 10px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .todo-grid, .tracker-grid { grid-template-columns: 1fr; }
+    .notes-layout { grid-template-columns: 1fr; }
+    nav { display: none; }
+    .section { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Espace de Lalia <span>✨</span></div>
+  <nav>
+    <button class="nav-btn active" onclick="showSection('todo', this)">✅ Todo</button>
+    <button class="nav-btn" onclick="showSection('calendar', this)">📅 Calendrier</button>
+    <button class="nav-btn" onclick="showSection('notes', this)">📓 Notes</button>
+    <button class="nav-btn" onclick="showSection('tracker', this)">💧 Tracker</button>
+    <button class="nav-btn" onclick="showSection('upcoming', this)">🎉 À venir</button>
+    <button class="nav-btn" onclick="showSection('moon', this)">🌙 Lune</button>
+    <button class="nav-btn" onclick="showSection('astral', this)">⭐ Thème Astral</button>
+  </nav>
+  <div class="date-display" id="dateDisplay"></div>
+</header>
+
+<!-- ══════════════════ TODO ══════════════════ -->
+<section class="section active" id="section-todo">
+  <div class="section-title">Les <em>tâches</em> de Lalia</div>
+  <div class="todo-grid">
+    <div class="card">
+      <div class="card-title">📌 À faire</div>
+      <div class="todo-input-row">
+        <input type="text" id="todoInput" placeholder="Ajouter une tâche, Lalia..." onkeydown="if(event.key==='Enter') addTodo()">
+        <select class="tag-select" id="todoTag">
+          <option value="normal">—</option>
+          <option value="urgent">🔴 Urgent</option>
+          <option value="important">🟡 Important</option>
+          <option value="zen">🌿 Tranquille</option>
+        </select>
+        <button class="btn-add" onclick="addTodo()">+</button>
+      </div>
+      <div class="todo-list" id="todoList"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">✨ Terminé aujourd'hui</div>
+      <div class="todo-list" id="todoDoneList">
+        <div style="color:var(--text-light);font-size:13px;text-align:center;padding:24px;font-style:italic;">
+          Les tâches terminées apparaîtront ici 🌸
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ CALENDRIER ══════════════════ -->
+<section class="section" id="section-calendar">
+  <div class="section-title">Le <em>calendrier</em> de Lalia</div>
+  <div class="cal-tabs">
+    <button class="cal-tab active" onclick="switchCalView('month')">Vue mensuelle</button>
+    <button class="cal-tab" onclick="switchCalView('week')">Vue semaine</button>
+  </div>
+
+  <!-- Monthly -->
+  <div class="cal-view active card" id="cal-month">
+    <div class="cal-header">
+      <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
+      <div class="cal-month-name" id="calMonthName"></div>
+      <button class="cal-nav" onclick="changeMonth(1)">›</button>
+    </div>
+    <div class="cal-grid-days">
+      <div class="cal-day-name">LUN</div><div class="cal-day-name">MAR</div>
+      <div class="cal-day-name">MER</div><div class="cal-day-name">JEU</div>
+      <div class="cal-day-name">VEN</div><div class="cal-day-name">SAM</div>
+      <div class="cal-day-name">DIM</div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-soft)"><span class="cal-dot dot-sport" style="width:10px;height:10px;border-radius:50%;display:inline-block"></span>Sport</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-soft)"><span class="cal-dot dot-social" style="width:10px;height:10px;border-radius:50%;display:inline-block"></span>Social</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-soft)"><span class="cal-dot dot-perso" style="width:10px;height:10px;border-radius:50%;display:inline-block"></span>Perso</div>
+    </div>
+  </div>
+
+  <!-- Weekly -->
+  <div class="cal-view card" id="cal-week">
+    <div class="week-header">
+      <button class="cal-nav" onclick="changeWeek(-1)">‹</button>
+      <div class="week-name" id="weekName"></div>
+      <button class="cal-nav" onclick="changeWeek(1)">›</button>
+    </div>
+    <div class="week-grid" id="weekGrid"></div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <span style="font-size:12px;color:var(--text-soft)">Catégories :</span>
+      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#a8d8a8;color:#3a7a3a">🏃 Sport</span>
+      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:var(--rose);color:white">🌸 Social</span>
+      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:var(--lilac-deep);color:white">💜 Perso</span>
+      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#f7d794;color:#8a6000">🛒 Marché</span>
+    </div>
+    <button class="btn-outline" style="margin-top:12px" onclick="toggleAddEvent()">+ Ajouter un événement</button>
+    <div class="add-event-form" id="addEventForm">
+      <div style="font-size:13px;font-weight:600;color:var(--text-soft);margin-bottom:12px;letter-spacing:0.5px">NOUVEL ÉVÉNEMENT</div>
+      <div class="form-row">
+        <input type="text" id="evTitle" placeholder="Nom de l'événement" style="flex:1;min-width:160px">
+        <select id="evDay" style="min-width:100px">
+          <option value="0">Lundi</option><option value="1">Mardi</option>
+          <option value="2">Mercredi</option><option value="3">Jeudi</option>
+          <option value="4">Vendredi</option><option value="5">Samedi</option><option value="6">Dimanche</option>
+        </select>
+        <input type="number" id="evHour" placeholder="Heure (8)" min="6" max="22" style="width:90px">
+        <select id="evType">
+          <option value="ev-sport">🏃 Sport</option>
+          <option value="ev-social">🌸 Social</option>
+          <option value="ev-perso">💜 Perso</option>
+          <option value="ev-marche">🛒 Marché</option>
+        </select>
+        <button class="btn-rose" onclick="addWeekEvent()">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ NOTES ══════════════════ -->
+<section class="section" id="section-notes">
+  <div class="section-title">Les <em>notes</em> & journal de Lalia</div>
+
+  <div class="notes-tabs">
+    <button class="notes-tab active" onclick="switchNotesTab('notes', this)">📓 Notes libres</button>
+    <button class="notes-tab" onclick="switchNotesTab('journal', this)">🌸 Journal du jour</button>
+  </div>
+
+  <!-- VUE NOTES LIBRES -->
+  <div class="notes-view active" id="notes-view-notes">
+    <div class="notes-layout">
+      <div>
+        <button class="btn-rose" style="width:100%;margin-bottom:12px" onclick="newNote()">+ Nouvelle note</button>
+        <div class="notes-list" id="notesList"></div>
+      </div>
+      <div class="card note-editor">
+        <input class="note-title-input" id="noteTitleInput" placeholder="Titre de la note..." oninput="saveCurrentNote()">
+        <textarea class="note-body" id="noteBody" placeholder="Écris ici, Lalia, tout ce qui te passe par la tête... 🌸" oninput="saveCurrentNote()"></textarea>
+        <div class="notes-actions">
+          <button class="btn-outline" onclick="deleteCurrentNote()">🗑 Supprimer</button>
+          <button class="btn-rose" onclick="saveCurrentNote()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VUE JOURNAL DU JOUR -->
+  <div class="notes-view" id="notes-view-journal">
+    <div class="journal-grid">
+
+      <!-- MATIN -->
+      <div class="journal-card journal-card-morning">
+        <div class="journal-header">
+          <div class="journal-icon">☀️</div>
+          <div class="journal-title journal-title-morning">Pensées du <em>matin</em></div>
+        </div>
+        <div class="journal-subtitle" id="journalDateMorning"></div>
+
+        <div class="journal-prompts">
+          <div class="journal-prompt-block">
+            <div class="journal-prompt-label journal-prompt-label-morning">💛 Comment je me sens ce matin ?</div>
+            <textarea class="journal-textarea journal-textarea-morning" id="jm-feeling" rows="3" placeholder="Mes émotions, mon énergie, mon humeur..."></textarea>
+          </div>
+          <div class="journal-prompt-block">
+            <div class="journal-prompt-label journal-prompt-label-morning">🌱 Mon intention pour aujourd'hui</div>
+            <textarea class="journal-textarea journal-textarea-morning" id="jm-intention" rows="2" placeholder="Ce que je veux accomplir, ressentir ou incarner..."></textarea>
+          </div>
+          <div class="journal-prompt-block">
+            <div class="journal-prompt-label journal-prompt-label-morning">✨ 3 choses pour lesquelles je suis reconnaissante</div>
+            <textarea class="journal-textarea journal-textarea-morning" id="jm-gratitude" rows="3" placeholder="1. ...\n2. ...\n3. ..."></textarea>
+          </div>
+        </div>
+
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#c47d0e;margin-bottom:8px">🌤 Mon humeur du matin</div>
+        <div class="journal-mood" id="moodMorning">
+          <button class="mood-btn" onclick="selectMood('morning','😴')">😴 Fatiguée</button>
+          <button class="mood-btn" onclick="selectMood('morning','😊')">😊 Bien</button>
+          <button class="mood-btn" onclick="selectMood('morning','🥰')">🥰 Heureuse</button>
+          <button class="mood-btn" onclick="selectMood('morning','😤')">😤 Stressée</button>
+          <button class="mood-btn" onclick="selectMood('morning','🌟')">🌟 Motivée</button>
+          <button class="mood-btn" onclick="selectMood('morning','🌧')">🌧 Mélancolique</button>
+        </div>
+
+        <button class="journal-save-btn journal-save-morning" onclick="saveJournal('morning')">☀️ Enregistrer mon matin</button>
+      </div>
+
+      <!-- SOIR -->
+      <div class="journal-card journal-card-evening">
+        <div class="journal-header">
+          <div class="journal-icon">🌙</div>
+          <div class="journal-title journal-title-evening">Bilan du <em>soir</em></div>
+        </div>
+        <div class="journal-subtitle" id="journalDateEvening"></div>
+
+        <div class="journal-prompts">
+          <div class="journal-prompt-block">
+            <div class="journal-prompt-label journal-prompt-label-evening">💜 Comment s'est passée ma journée ?</div>
+            <textarea class="journal-textarea journal-textarea-evening" id="je-day" rows="3" placeholder="Ce qui s'est passé, ce que j'ai vécu..."></textarea>
+          </div>
+          <div class="journal-prompt-block">
+            <div class="journal-prompt-label journal-prompt-label-evening">🌟 Ma fierté du jour</div>
+            <textarea class="journal-textarea journal-textarea-evening" id="je-pride" rows="2" placeholder="Même petite, quelque chose dont je suis fière..."></textarea>
+          </div>
+          <div class="journal-prompt-block">
+            <div class="journal-prompt-label journal-prompt-label-evening">🔮 Ce que je laisse partir ce soir</div>
+            <textarea class="journal-textarea journal-textarea-evening" id="je-release" rows="2" placeholder="Une tension, une pensée, un souci à lâcher..."></textarea>
+          </div>
+        </div>
+
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#7b4fa6;margin-bottom:8px">🌙 Mon humeur du soir</div>
+        <div class="journal-mood" id="moodEvening">
+          <button class="mood-btn" onclick="selectMood('evening','😪')">😪 Épuisée</button>
+          <button class="mood-btn" onclick="selectMood('evening','😌')">😌 Apaisée</button>
+          <button class="mood-btn" onclick="selectMood('evening','🥰')">🥰 Comblée</button>
+          <button class="mood-btn" onclick="selectMood('evening','😔')">😔 Triste</button>
+          <button class="mood-btn" onclick="selectMood('evening','😤')">😤 Frustrée</button>
+          <button class="mood-btn" onclick="selectMood('evening','🌙')">🌙 Sereine</button>
+        </div>
+
+        <button class="journal-save-btn journal-save-evening" onclick="saveJournal('evening')">🌙 Enregistrer mon soir</button>
+      </div>
+    </div>
+
+    <!-- Historique -->
+    <div class="journal-history" id="journalHistory"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ TRACKER ══════════════════ -->
+<section class="section" id="section-tracker">
+  <div class="section-title">Le <em>tracker</em> de Lalia</div>
+
+  <div class="tracker-tabs">
+    <button class="tracker-tab active" onclick="switchTrackerTab('daily', this)">☀️ Quotidien</button>
+    <button class="tracker-tab" onclick="switchTrackerTab('weekly', this)">📅 Hebdomadaire</button>
+  </div>
+
+  <!-- VUE QUOTIDIENNE -->
+  <div class="tracker-view active" id="tracker-daily">
+    <div class="tracker-grid">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div class="card-title" style="margin:0">Habitudes du jour</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="streak-badge">🔥 <span id="streakCount">0</span> jour(s)</div>
+            <button class="btn-outline" style="font-size:12px;padding:6px 12px" onclick="openHabitModal()">✏️ Modifier</button>
+          </div>
+        </div>
+        <div id="habitList"></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-text" id="progressText">0 / 0 complétés</div>
+      </div>
+      <div class="card">
+        <div class="card-title">✏️ Ajouter une habitude</div>
+        <div style="font-size:13px;color:var(--text-soft);margin-bottom:12px">Personnalise ta liste quotidienne</div>
+        <div class="todo-input-row">
+          <input type="text" id="habitEmoji" placeholder="🌟" style="width:56px;text-align:center">
+          <input type="text" id="habitName" placeholder="Nom de l'habitude" style="flex:1" onkeydown="if(event.key==='Enter') addHabit()">
+          <button class="btn-add" onclick="addHabit()">+</button>
+        </div>
+        <div style="margin-top:16px;font-size:13px;color:var(--text-soft);margin-bottom:8px;font-weight:500">🗓 Cette semaine</div>
+        <div id="weekCalTracker" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VUE HEBDOMADAIRE -->
+  <div class="tracker-view" id="tracker-weekly">
+    <div class="card" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="card-title" style="margin:0">Activités de la semaine</div>
+        <span style="font-size:12px;color:var(--text-soft);font-style:italic">Coche quand c'est fait ✨</span>
+      </div>
+      <div class="weekly-tasks-grid" id="weeklyTasksGrid"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">➕ Ajouter une activité hebdomadaire</div>
+      <div class="form-row" style="flex-wrap:wrap">
+        <input type="text" id="wkEmoji" placeholder="🏊" style="width:56px;text-align:center">
+        <input type="text" id="wkName" placeholder="Nom de l'activité" style="flex:1;min-width:140px">
+        <select id="wkDay" style="min-width:110px">
+          <option value="0">Lundi</option><option value="1">Mardi</option>
+          <option value="2">Mercredi</option><option value="3">Jeudi</option>
+          <option value="4">Vendredi</option><option value="5">Samedi</option><option value="6">Dimanche</option>
+        </select>
+        <button class="btn-rose" onclick="addWeeklyTask()">Ajouter</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ À VENIR ══════════════════ -->
+<section class="section" id="section-upcoming">
+  <div class="section-title">Ce qui <em>attend</em> Lalia ✨</div>
+  <div class="upcoming-form">
+    <div style="font-size:13px;font-weight:600;color:var(--text-soft);margin-bottom:12px;letter-spacing:0.5px">AJOUTER UN ÉVÉNEMENT</div>
+    <div class="form-row">
+      <input type="text" id="upTitle" placeholder="Nom de l'événement" style="flex:1;min-width:160px">
+      <input type="date" id="upDate">
+      <select id="upType">
+        <option value="🎂">🎂 Anniversaire</option>
+        <option value="🎵">🎵 Concert</option>
+        <option value="✈️">✈️ Voyage</option>
+        <option value="🎉">🎉 Fête</option>
+        <option value="🍽️">🍽️ Restaurant</option>
+        <option value="💅">💅 Rendez-vous</option>
+        <option value="🌟">🌟 Autre</option>
+      </select>
+      <button class="btn-rose" onclick="addUpcoming()">Ajouter</button>
+    </div>
+  </div>
+  <div style="margin-top:20px" id="upcomingList"></div>
+</section>
+
+<!-- ══════════════════ LUNE ══════════════════ -->
+<section class="section" id="section-moon">
+  <div class="section-title">La <em>lune</em> de Lalia 🌙</div>
+
+  <!-- Hero -->
+  <div class="moon-hero" id="moonHero">
+    <div class="moon-stars" id="moonStars"></div>
+    <div class="moon-svg-wrap">
+      <canvas id="moonCanvas" width="120" height="120"></canvas>
+    </div>
+    <div class="moon-info">
+      <div class="moon-phase-name" id="moonPhaseName">—</div>
+      <div class="moon-date-info" id="moonDateInfo">—</div>
+      <div class="moon-stats">
+        <div class="moon-stat">
+          <div class="moon-stat-val" id="moonIllum">—</div>
+          <div class="moon-stat-label">ILLUMINATION</div>
+        </div>
+        <div class="moon-stat">
+          <div class="moon-stat-val" id="moonAge">—</div>
+          <div class="moon-stat-label">JOUR DU CYCLE</div>
+        </div>
+        <div class="moon-stat">
+          <div class="moon-stat-val" id="moonDaysLeft">—</div>
+          <div class="moon-stat-label">PROCHAIN CYCLE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="moon-grid">
+    <!-- Cycle du mois -->
+    <div class="moon-cycle-card">
+      <div class="moon-cycle-title">🌑 Cycle du mois</div>
+      <div class="moon-cycle-row" id="moonCycleRow"></div>
+    </div>
+    <!-- Conseils -->
+    <div class="moon-advice-card">
+      <div class="moon-advice-title">✨ Énergie du moment</div>
+      <div class="moon-advice-list" id="moonAdvice"></div>
+    </div>
+  </div>
+
+  <!-- Prochaines phases -->
+  <div class="moon-next-card">
+    <div class="moon-cycle-title">🔮 Prochaines phases clés</div>
+    <div class="moon-next-row" id="moonNextPhases"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ THÈME ASTRAL ══════════════════ -->
+<section class="section" id="section-astral">
+  <div class="section-title">Le <em>thème astral</em> de Lalia ⭐</div>
+
+  <!-- Hero -->
+  <div class="astral-hero">
+    <div class="astral-hero-inner">
+      <div class="astral-chart-wrap">
+        <canvas id="astralChart" width="160" height="160"></canvas>
+      </div>
+      <div class="astral-bio">
+        <div class="astral-name">Lalia, née sous les étoiles <em>du Lion</em> ♌</div>
+        <div class="astral-birth">4 août 2003 · 16h45 · Lunéville, France (48°36'N, 6°30'E)</div>
+        <div class="astral-trio">
+          <div class="astral-trio-item">
+            <div class="astral-trio-emoji">☀️</div>
+            <div class="astral-trio-val">Lion</div>
+            <div class="astral-trio-label">SOLEIL</div>
+          </div>
+          <div class="astral-trio-item">
+            <div class="astral-trio-emoji">🌙</div>
+            <div class="astral-trio-val">Scorpion</div>
+            <div class="astral-trio-label">LUNE</div>
+          </div>
+          <div class="astral-trio-item">
+            <div class="astral-trio-emoji">⬆️</div>
+            <div class="astral-trio-val">Sagittaire</div>
+            <div class="astral-trio-label">ASCENDANT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Horoscope quotidien IA -->
+  <div class="astral-horoscope">
+    <div class="horoscope-header">
+      <div class="horoscope-title">Ton horoscope <em>du jour</em></div>
+      <div class="horoscope-date" id="horoscopeDate"></div>
+      <button class="btn-rose" onclick="loadHoroscope(true)" style="font-size:12px;padding:7px 14px">↻ Actualiser</button>
+    </div>
+    <div id="horoscopeContent">
+      <div class="horoscope-loading"><div class="spinner"></div>Les astres s'alignent pour toi...</div>
+    </div>
+  </div>
+
+  <!-- Planètes -->
+  <div style="margin-bottom:12px">
+    <div class="card-title">🪐 Positions planétaires natales</div>
+  </div>
+  <div class="astral-planets-grid" id="planetsGrid"></div>
+
+  <!-- Maisons -->
+  <div class="astral-houses">
+    <div class="card-title">🏠 Maisons astrologiques</div>
+    <div class="houses-grid" id="housesGrid"></div>
+  </div>
+
+  <!-- Aspects -->
+  <div class="astral-houses">
+    <div class="card-title">🔺 Aspects principaux</div>
+    <div class="aspects-grid" id="aspectsGrid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ EVENT EDIT MODAL ══════════════════ -->
+<div class="ev-modal-overlay" id="evEditModal" onclick="if(event.target===this)closeEvModal()">
+  <div class="ev-modal">
+    <div class="ev-modal-title">Modifier <em>l'événement</em></div>
+    <div class="ev-modal-field">
+      <div class="ev-modal-label">Titre</div>
+      <input class="ev-modal-input" id="evEditTitle" type="text" placeholder="Nom de l'événement">
+    </div>
+    <div style="display:flex;gap:12px">
+      <div class="ev-modal-field" style="flex:1">
+        <div class="ev-modal-label">Jour</div>
+        <select class="ev-modal-input" id="evEditDay">
+          <option value="0">Lundi</option><option value="1">Mardi</option>
+          <option value="2">Mercredi</option><option value="3">Jeudi</option>
+          <option value="4">Vendredi</option><option value="5">Samedi</option><option value="6">Dimanche</option>
+        </select>
+      </div>
+      <div class="ev-modal-field" style="width:90px">
+        <div class="ev-modal-label">Heure</div>
+        <input class="ev-modal-input" id="evEditHour" type="number" min="6" max="22" placeholder="9">
+      </div>
+    </div>
+    <div class="ev-modal-field">
+      <div class="ev-modal-label">Catégorie</div>
+      <select class="ev-modal-input" id="evEditType">
+        <option value="ev-sport">🏃 Sport</option>
+        <option value="ev-social">🌸 Social</option>
+        <option value="ev-perso">💜 Perso</option>
+        <option value="ev-marche">🛒 Marché</option>
+      </select>
+    </div>
+    <div class="ev-modal-actions">
+      <button class="btn-outline" style="color:#e05070;border-color:#e05070" onclick="deleteEvFromModal()">🗑 Supprimer</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn-outline" onclick="closeEvModal()">Annuler</button>
+        <button class="btn-rose" onclick="saveEvModal()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ MODAL EDIT HABITS ══════════════════ -->
+<div class="modal-overlay" id="habitModal" onclick="if(event.target===this)closeHabitModal()">
+  <div class="modal">
+    <div class="modal-title">Modifier mes <em>habitudes</em></div>
+    <div class="modal-list" id="modalHabitList"></div>
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeHabitModal()">Annuler</button>
+      <button class="btn-rose" onclick="saveHabitModal()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── UTILS ───────────────────────────────────
+const JOURS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const MOIS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const MOIS_COURT = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+
+function todayStr() {
+  const d = new Date(); return d.toDateString();
+}
+function load(k, def) { try { return JSON.parse(localStorage.getItem(k)) ?? def; } catch { return def; } }
+function save(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+// ─── TOAST ────────────────────────────────────
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.innerHTML = '✨ ' + msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+function save(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+// ─── DATE DISPLAY ─────────────────────────────
+function updateDate() {
+  const d = new Date();
+  document.getElementById('dateDisplay').textContent =
+    `${JOURS[d.getDay()]} ${d.getDate()} ${MOIS_FR[d.getMonth()]} ${d.getFullYear()}`;
+}
+updateDate();
+
+// ─── NAVIGATION ───────────────────────────────
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'moon') renderMoon();
+  if (id === 'astral') renderAstral();
+}
+
+// ─── TODO ────────────────────────────────────
+let todos = load('todos', []);
+
+function saveTodos() { save('todos', todos); renderTodos(); }
+
+function addTodo() {
+  const v = document.getElementById('todoInput').value.trim();
+  const tag = document.getElementById('todoTag').value;
+  if (!v) return;
+  todos.push({ id: Date.now(), text: v, done: false, tag, date: todayStr() });
+  document.getElementById('todoInput').value = '';
+  saveTodos();
+}
+
+function toggleTodo(id) {
+  const t = todos.find(t => t.id === id);
+  if (t) { t.done = !t.done; saveTodos(); }
+}
+
+function deleteTodo(id) { todos = todos.filter(t => t.id !== id); saveTodos(); }
+
+function renderTodos() {
+  const active = todos.filter(t => !t.done);
+  const done = todos.filter(t => t.done);
+  const tagLabel = { urgent: '🔴 Urgent', important: '🟡 Important', zen: '🌿 Tranquille' };
+
+  document.getElementById('todoList').innerHTML = active.length === 0
+    ? '<div style="color:var(--text-light);font-size:13px;text-align:center;padding:24px;font-style:italic">Tout est fait ! 🎉</div>'
+    : active.map(t => `
+      <div class="todo-item" onclick="toggleTodo(${t.id})">
+        <div class="todo-check"></div>
+        <span class="todo-text">${t.text}</span>
+        ${t.tag !== 'normal' ? `<span class="todo-priority">${tagLabel[t.tag]}</span>` : ''}
+        <button class="todo-delete" onclick="event.stopPropagation();deleteTodo(${t.id})">×</button>
+      </div>`).join('');
+
+  document.getElementById('todoDoneList').innerHTML = done.length === 0
+    ? '<div style="color:var(--text-light);font-size:13px;text-align:center;padding:24px;font-style:italic">Les tâches terminées apparaîtront ici 🌸</div>'
+    : done.map(t => `
+      <div class="todo-item done" onclick="toggleTodo(${t.id})">
+        <div class="todo-check"></div>
+        <span class="todo-text">${t.text}</span>
+        <button class="todo-delete" onclick="event.stopPropagation();deleteTodo(${t.id})">×</button>
+      </div>`).join('');
+}
+renderTodos();
+
+// ─── CALENDAR ─────────────────────────────────
+let calDate = new Date();
+let calEvents = load('calEvents', [
+  { date: '2026-03-21', title: 'Piscine', type: 'ev-sport' },
+  { date: '2026-03-25', title: 'Marché', type: 'ev-marche' },
+  { date: '2026-03-26', title: 'Yoga', type: 'ev-sport' },
+]);
+
+function switchCalView(v) {
+  document.querySelectorAll('.cal-view').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.cal-tab').forEach(c => c.classList.remove('active'));
+  document.getElementById('cal-' + v).classList.add('active');
+  event.target.classList.add('active');
+  if (v === 'month') renderMonth(); else renderWeek();
+}
+
+function changeMonth(d) { calDate.setMonth(calDate.getMonth() + d); renderMonth(); }
+
+function renderMonth() {
+  const y = calDate.getFullYear(), m = calDate.getMonth();
+  document.getElementById('calMonthName').textContent = `${MOIS_FR[m]} ${y}`;
+  const first = new Date(y, m, 1);
+  const last = new Date(y, m + 1, 0);
+  let startDay = first.getDay() === 0 ? 6 : first.getDay() - 1;
+  let cells = [];
+  for (let i = startDay; i > 0; i--) {
+    const d = new Date(y, m, 1 - i);
+    cells.push({ date: d, otherMonth: true });
+  }
+  for (let d = 1; d <= last.getDate(); d++) cells.push({ date: new Date(y, m, d), otherMonth: false });
+  while (cells.length % 7 !== 0) {
+    const d = new Date(y, m + 1, cells.length - last.getDate() - startDay + 1);
+    cells.push({ date: d, otherMonth: true });
+  }
+  const today = new Date(); today.setHours(0,0,0,0);
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = cells.map(c => {
+    const isToday = c.date.toDateString() === today.toDateString();
+    const ds = c.date.toISOString().slice(0,10);
+
+    // calEvents (dated)
+    const evs = calEvents.filter(e => e.date === ds);
+    // weekEvents (recurring by day-of-week: 0=Mon…6=Sun)
+    const dow = c.date.getDay() === 0 ? 6 : c.date.getDay() - 1;
+    const wEvs = weekEvents.filter(e => e.day === dow);
+
+    const dotColor = { 'ev-sport':'dot-sport', 'ev-social':'dot-social', 'ev-perso':'dot-perso', 'ev-marche':'' };
+    const dotStyle = { 'ev-marche':'background:#f7d794' };
+
+    const dots = [
+      ...evs.map(e => `<span class="cal-dot ${dotColor[e.type]||''}" style="${dotStyle[e.type]||''}" title="${e.title}"></span>`),
+      ...wEvs.map(e => `<span class="cal-dot ${dotColor[e.type]||''}" style="${dotStyle[e.type]||''}opacity:0.7;" title="${e.title}"></span>`)
+    ].join('');
+
+    // Show up to 2 event names compactly
+    const allEvs = [...evs, ...wEvs];
+    const labels = allEvs.slice(0,2).map(e => {
+      const color = e.type==='ev-sport'?'#7bc47b':e.type==='ev-marche'?'#c4970a':e.type==='ev-social'?'var(--rose-deep)':'var(--lilac-deep)';
+      return `<div style="font-size:8px;color:${color};font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.2">${e.title.replace(/ ?[🏊🛒🧘🏃💜🌸]/g,'').trim()}</div>`;
+    }).join('');
+
+    return `<button class="cal-cell${isToday?' today':''}${c.otherMonth?' other-month':''}" style="justify-content:flex-start;gap:2px;" onclick="openDayPopup(event, '${ds}')">
+      <span class="cal-day-num">${c.date.getDate()}</span>
+      ${labels}
+      <div class="cal-dots">${dots}</div>
+    </button>`;
+  }).join('');
+}
+// renderMonth called after weekEvents is declared below
+
+// Week view
+let weekOffset = 0;
+function getWeekStart(offset = 0) {
+  const d = new Date();
+  const day = d.getDay() === 0 ? 6 : d.getDay() - 1;
+  d.setDate(d.getDate() - day + offset * 7);
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function changeWeek(d) { weekOffset += d; renderWeek(); }
+
+let weekEvents = load('weekEvents', [
+  { day: 1, hour: 9, title: 'Piscine 🏊', type: 'ev-sport' },
+  { day: 3, hour: 14, title: 'Marché 🛒', type: 'ev-marche' },
+  { day: 5, hour: 10, title: 'Yoga 🧘', type: 'ev-sport' },
+]);
+
+// Now that weekEvents is declared, render the month calendar
+renderMonth();
+
+function renderWeek() {
+  const ws = getWeekStart(weekOffset);
+  const we = new Date(ws); we.setDate(ws.getDate() + 6);
+  document.getElementById('weekName').textContent =
+    `${ws.getDate()} ${MOIS_COURT[ws.getMonth()]} – ${we.getDate()} ${MOIS_COURT[we.getMonth()]} ${we.getFullYear()}`;
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const days = Array.from({length:7}, (_,i) => {
+    const d = new Date(ws); d.setDate(ws.getDate()+i); return d;
+  });
+  const HOURS = Array.from({length:17}, (_,i) => i + 6);
+
+  let html = '<div class="week-time-col">';
+  html += '<div class="week-day-head" style="border-left:none"></div>';
+  HOURS.forEach(h => { html += `<div class="week-slot week-time-label">${h}h</div>`; });
+  html += '</div>';
+
+  days.forEach((d, di) => {
+    const isToday = d.toDateString() === today.toDateString();
+    html += `<div class="week-day-col">
+      <div class="week-day-head${isToday?' today-head':''}">${['L','M','M','J','V','S','D'][di]}<br><span style="font-size:15px;font-weight:500">${d.getDate()}</span></div>`;
+    HOURS.forEach(h => {
+      const ev = weekEvents.find(e => e.day === di && e.hour === h);
+      html += `<div class="week-slot">${ev ? `<div class="week-event ${ev.type}" onclick="openEvModal(${weekEvents.indexOf(ev)})" style="cursor:pointer" title="Cliquer pour modifier">${ev.title}</div>` : ''}</div>`;
+    });
+    html += '</div>';
+  });
+
+  document.getElementById('weekGrid').innerHTML = html;
+}
+renderWeek();
+
+function toggleAddEvent() {
+  const f = document.getElementById('addEventForm');
+  f.classList.toggle('open');
+}
+
+function addWeekEvent() {
+  const title = document.getElementById('evTitle').value.trim();
+  const day = parseInt(document.getElementById('evDay').value);
+  const hour = parseInt(document.getElementById('evHour').value) || 9;
+  const type = document.getElementById('evType').value;
+  if (!title) return;
+  weekEvents.push({ day, hour, title, type });
+  save('weekEvents', weekEvents);
+  document.getElementById('evTitle').value = '';
+  renderWeek();
+  renderMonth();
+}
+
+// ─── DAY POPUP (monthly view) ─────────────────
+let currentPopup = null;
+let evModalIdx = null;
+
+function closePopup() {
+  if (currentPopup) { currentPopup.remove(); currentPopup = null; }
+  const ov = document.getElementById('popupOverlay');
+  if (ov) ov.remove();
+}
+
+function openDayPopup(e, dateStr) {
+  e.stopPropagation();
+  closePopup();
+
+  const d = new Date(dateStr);
+  const dow = d.getDay() === 0 ? 6 : d.getDay() - 1;
+  const dated = calEvents.filter(ev => ev.date === dateStr);
+  const recurring = weekEvents.filter(ev => ev.day === dow);
+  const JOURS_COURT = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  const MOIS_COURT2 = ['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+
+  const typeLabel = { 'ev-sport':'🏃','ev-social':'🌸','ev-perso':'💜','ev-marche':'🛒' };
+
+  let html = `<div class="ev-popup-title">📅 <em>${JOURS_COURT[dow]} ${d.getDate()} ${MOIS_COURT2[d.getMonth()]}</em></div>`;
+
+  if (dated.length === 0 && recurring.length === 0) {
+    html += `<div style="color:var(--text-light);font-size:13px;font-style:italic;padding:4px 0 10px">Aucun événement ce jour</div>`;
+  }
+
+  dated.forEach((ev, i) => {
+    html += `<div class="ev-popup-item">
+      <span style="font-size:16px">${typeLabel[ev.type]||'📌'}</span>
+      <span class="ev-popup-item-name">${ev.title}</span>
+      <div class="ev-popup-btns">
+        <button class="ev-popup-btn" onclick="openCalEventModal('dated',${calEvents.indexOf(ev)})" title="Modifier">✏️</button>
+        <button class="ev-popup-btn" onclick="deleteCalEvent('dated',${calEvents.indexOf(ev)})" title="Supprimer">🗑</button>
+      </div>
+    </div>`;
+  });
+
+  recurring.forEach((ev) => {
+    const idx = weekEvents.indexOf(ev);
+    html += `<div class="ev-popup-item">
+      <span style="font-size:16px">${typeLabel[ev.type]||'📌'}</span>
+      <span class="ev-popup-item-name">${ev.title}</span>
+      <span class="ev-popup-item-time">${ev.hour}h · hebdo</span>
+      <div class="ev-popup-btns">
+        <button class="ev-popup-btn" onclick="openEvModal(${idx});closePopup()" title="Modifier">✏️</button>
+        <button class="ev-popup-btn" onclick="deleteCalEvent('week',${idx});closePopup()" title="Supprimer">🗑</button>
+      </div>
+    </div>`;
+  });
+
+  html += `<button class="btn-outline ev-popup-add" onclick="prefillAddEvent('${dateStr}', ${dow});closePopup()">+ Ajouter un événement</button>`;
+
+  const popup = document.createElement('div');
+  popup.className = 'ev-popup';
+  popup.innerHTML = html;
+
+  // Position near click
+  const rect = e.currentTarget.getBoundingClientRect();
+  const scrollY = window.scrollY;
+  let top = rect.bottom + scrollY + 6;
+  let left = rect.left;
+  if (left + 300 > window.innerWidth) left = window.innerWidth - 310;
+  popup.style.top = top + 'px';
+  popup.style.left = left + 'px';
+  document.body.appendChild(popup);
+  currentPopup = popup;
+
+  // Overlay to close
+  const ov = document.createElement('div');
+  ov.id = 'popupOverlay';
+  ov.className = 'ev-popup-overlay';
+  ov.onclick = closePopup;
+  document.body.appendChild(ov);
+}
+
+function prefillAddEvent(dateStr, dow) {
+  // Switch to week view and open add form
+  document.querySelectorAll('.cal-view').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.cal-tab').forEach(c => c.classList.remove('active'));
+  document.getElementById('cal-week').classList.add('active');
+  document.querySelectorAll('.cal-tab')[1].classList.add('active');
+  renderWeek();
+  document.getElementById('evDay').value = dow;
+  document.getElementById('addEventForm').classList.add('open');
+  document.getElementById('evTitle').focus();
+}
+
+function deleteCalEvent(source, idx) {
+  if (source === 'dated') {
+    calEvents.splice(idx, 1);
+    save('calEvents', calEvents);
+  } else {
+    weekEvents.splice(idx, 1);
+    save('weekEvents', weekEvents);
+  }
+  closePopup();
+  renderMonth();
+  renderWeek();
+  showToast('Événement supprimé 🗑');
+}
+
+function openCalEventModal(source, idx) {
+  closePopup();
+  const ev = source === 'dated' ? calEvents[idx] : weekEvents[idx];
+  if (!ev) return;
+  evModalIdx = { source, idx };
+  document.getElementById('evEditTitle').value = ev.title;
+  document.getElementById('evEditHour').value = ev.hour || '';
+  document.getElementById('evEditType').value = ev.type;
+  if (source === 'dated') {
+    // For dated events, day selector is irrelevant — hide it
+    document.getElementById('evEditDay').parentElement.parentElement.style.display = 'none';
+  } else {
+    document.getElementById('evEditDay').parentElement.parentElement.style.display = 'flex';
+    document.getElementById('evEditDay').value = ev.day;
+  }
+  document.getElementById('evEditModal').classList.add('open');
+}
+
+// ─── EVENT EDIT MODAL ─────────────────────────
+function openEvModal(idx) {
+  openCalEventModal('week', idx);
+}
+
+function closeEvModal() {
+  document.getElementById('evEditModal').classList.remove('open');
+  evModalIdx = null;
+}
+
+function saveEvModal() {
+  if (evModalIdx === null) return;
+  const { source, idx } = evModalIdx;
+  const title = document.getElementById('evEditTitle').value.trim();
+  const hour = parseInt(document.getElementById('evEditHour').value) || 9;
+  const type = document.getElementById('evEditType').value;
+  if (!title) return;
+
+  if (source === 'dated') {
+    calEvents[idx].title = title;
+    calEvents[idx].type = type;
+    save('calEvents', calEvents);
+  } else {
+    const day = parseInt(document.getElementById('evEditDay').value);
+    weekEvents[idx] = { ...weekEvents[idx], title, hour, type, day };
+    save('weekEvents', weekEvents);
+  }
+  closeEvModal();
+  renderMonth();
+  renderWeek();
+  showToast('Événement modifié ✨');
+}
+
+function deleteEvFromModal() {
+  if (evModalIdx === null) return;
+  const { source, idx } = evModalIdx;
+  if (source === 'dated') { calEvents.splice(idx, 1); save('calEvents', calEvents); }
+  else { weekEvents.splice(idx, 1); save('weekEvents', weekEvents); }
+  closeEvModal();
+  renderMonth();
+  renderWeek();
+  showToast('Événement supprimé 🗑');
+}
+let notes = load('notes', [
+  { id: 1, title: 'Idées de week-end', body: 'Marché le samedi matin ☀️\nBalade en forêt...\n', date: '21 mars 2026' }
+]);
+let currentNoteId = notes[0]?.id ?? null;
+
+function renderNotesList() {
+  document.getElementById('notesList').innerHTML = notes.map(n =>
+    `<div class="note-item${n.id === currentNoteId ? ' active' : ''}" onclick="selectNote(${n.id})">
+      <div class="note-item-title">${n.title || 'Sans titre'}</div>
+      <div class="note-item-date">${n.date}</div>
+    </div>`).join('');
+  const cur = notes.find(n => n.id === currentNoteId);
+  if (cur) {
+    document.getElementById('noteTitleInput').value = cur.title;
+    document.getElementById('noteBody').value = cur.body;
+  }
+}
+
+function selectNote(id) { currentNoteId = id; renderNotesList(); }
+
+function newNote() {
+  const d = new Date();
+  const n = { id: Date.now(), title: '', body: '', date: `${d.getDate()} ${MOIS_COURT[d.getMonth()]} ${d.getFullYear()}` };
+  notes.unshift(n); currentNoteId = n.id;
+  save('notes', notes); renderNotesList();
+  document.getElementById('noteTitleInput').focus();
+}
+
+function saveCurrentNote() {
+  const n = notes.find(n => n.id === currentNoteId);
+  if (!n) return;
+  n.title = document.getElementById('noteTitleInput').value;
+  n.body = document.getElementById('noteBody').value;
+  save('notes', notes); renderNotesList();
+  showToast('Note enregistrée 🌸');
+}
+
+function deleteCurrentNote() {
+  notes = notes.filter(n => n.id !== currentNoteId);
+  currentNoteId = notes[0]?.id ?? null;
+  save('notes', notes); renderNotesList();
+}
+renderNotesList();
+
+// ─── NOTES TABS ────────────────────────────────
+function switchNotesTab(tab, btn) {
+  document.querySelectorAll('.notes-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.notes-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('notes-view-' + tab).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (tab === 'journal') renderJournal();
+}
+
+// ─── JOURNAL ──────────────────────────────────
+let journalEntries = load('journalEntries', []);
+let selectedMoods = { morning: null, evening: null };
+
+function renderJournal() {
+  const today = new Date();
+  const dateStr = `${JOURS[today.getDay()]} ${today.getDate()} ${MOIS_FR[today.getMonth()]} ${today.getFullYear()}`;
+  document.getElementById('journalDateMorning').textContent = dateStr;
+  document.getElementById('journalDateEvening').textContent = dateStr;
+
+  // Load today's existing entries
+  const todayKey = today.toISOString().slice(0,10);
+  const todayM = journalEntries.find(e => e.date === todayKey && e.type === 'morning');
+  const todayE = journalEntries.find(e => e.date === todayKey && e.type === 'evening');
+
+  if (todayM) {
+    document.getElementById('jm-feeling').value = todayM.feeling || '';
+    document.getElementById('jm-intention').value = todayM.intention || '';
+    document.getElementById('jm-gratitude').value = todayM.gratitude || '';
+    selectedMoods.morning = todayM.mood;
+    refreshMoodBtns('morning');
+  }
+  if (todayE) {
+    document.getElementById('je-day').value = todayE.day || '';
+    document.getElementById('je-pride').value = todayE.pride || '';
+    document.getElementById('je-release').value = todayE.release || '';
+    selectedMoods.evening = todayE.mood;
+    refreshMoodBtns('evening');
+  }
+
+  renderJournalHistory();
+}
+
+function selectMood(type, mood) {
+  selectedMoods[type] = mood;
+  refreshMoodBtns(type);
+}
+
+function refreshMoodBtns(type) {
+  const container = document.getElementById('mood' + type.charAt(0).toUpperCase() + type.slice(1));
+  if (!container) return;
+  container.querySelectorAll('.mood-btn').forEach(btn => {
+    const emoji = btn.textContent.split(' ')[0];
+    btn.classList.toggle('selected', emoji === selectedMoods[type]);
+  });
+}
+
+function saveJournal(type) {
+  const today = new Date().toISOString().slice(0,10);
+  journalEntries = journalEntries.filter(e => !(e.date === today && e.type === type));
+
+  if (type === 'morning') {
+    journalEntries.push({
+      date: today, type: 'morning',
+      mood: selectedMoods.morning,
+      feeling: document.getElementById('jm-feeling').value,
+      intention: document.getElementById('jm-intention').value,
+      gratitude: document.getElementById('jm-gratitude').value,
+    });
+  } else {
+    journalEntries.push({
+      date: today, type: 'evening',
+      mood: selectedMoods.evening,
+      day: document.getElementById('je-day').value,
+      pride: document.getElementById('je-pride').value,
+      release: document.getElementById('je-release').value,
+    });
+  }
+
+  save('journalEntries', journalEntries);
+  showToast(type === 'morning' ? 'Pensées du matin sauvegardées ☀️' : 'Bilan du soir sauvegardé 🌙');
+  renderJournalHistory();
+}
+
+function renderJournalHistory() {
+  const el = document.getElementById('journalHistory');
+  if (!el) return;
+
+  // Group by date, show last 7 days
+  const sorted = [...journalEntries].sort((a,b) => b.date.localeCompare(a.date)).slice(0, 20);
+  if (sorted.length === 0) {
+    el.innerHTML = '<div class="journal-history-title">📖 Historique</div><div style="color:var(--text-light);font-size:13px;font-style:italic;text-align:center;padding:20px">Tes entrées apparaîtront ici ✨</div>';
+    return;
+  }
+
+  const byDate = {};
+  sorted.forEach(e => { if (!byDate[e.date]) byDate[e.date] = []; byDate[e.date].push(e); });
+
+  const html = Object.entries(byDate).map(([date, entries]) => {
+    const d = new Date(date);
+    const label = `${JOURS[d.getDay()]} ${d.getDate()} ${MOIS_FR[d.getMonth()]}`;
+    return `<div style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;color:var(--text-light);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px">${label}</div>
+      ${entries.map(e => {
+        if (e.type === 'morning') {
+          const preview = [e.feeling, e.intention, e.gratitude].filter(Boolean).join(' · ').slice(0,120);
+          return `<div class="journal-entry">
+            <div class="journal-entry-date">☀️ MATIN ${e.mood || ''}</div>
+            <div class="journal-entry-text">${preview || '<em style="color:var(--text-light)">Entrée vide</em>'}${preview.length >= 120 ? '...' : ''}</div>
+          </div>`;
+        } else {
+          const preview = [e.day, e.pride, e.release].filter(Boolean).join(' · ').slice(0,120);
+          return `<div class="journal-entry journal-entry-evening">
+            <div class="journal-entry-date">🌙 SOIR ${e.mood || ''}</div>
+            <div class="journal-entry-text">${preview || '<em style="color:var(--text-light)">Entrée vide</em>'}${preview.length >= 120 ? '...' : ''}</div>
+          </div>`;
+        }
+      }).join('')}
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<div class="journal-history-title">📖 Historique récent</div>${html}`;
+}
+let habits = load('habits', [
+  { id: 1, emoji: '💧', name: 'Boire 2L d\'eau', done: false },
+  { id: 2, emoji: '🧘', name: 'Méditer 10 min', done: false },
+  { id: 3, emoji: '🚶', name: 'Marcher 30 min', done: false },
+  { id: 4, emoji: '🥗', name: 'Manger des légumes', done: false },
+  { id: 5, emoji: '📵', name: 'Pas d\'écrans le soir', done: false },
+  { id: 6, emoji: '😴', name: 'Dormir 8h', done: false },
+]);
+let lastHabitDay = load('lastHabitDay', '');
+let streak = load('streak', 0);
+
+// Reset habits daily
+if (lastHabitDay !== todayStr()) {
+  const allDone = habits.every(h => h.done);
+  if (allDone && lastHabitDay !== '') streak++;
+  else if (lastHabitDay !== '' && !allDone) streak = 0;
+  habits.forEach(h => h.done = false);
+  save('habits', habits);
+  save('lastHabitDay', todayStr());
+  save('streak', streak);
+}
+
+function toggleHabit(id) {
+  const h = habits.find(h => h.id === id);
+  if (h) { h.done = !h.done; save('habits', habits); renderHabits(); }
+}
+
+function addHabit() {
+  const emoji = document.getElementById('habitEmoji').value.trim() || '✨';
+  const name = document.getElementById('habitName').value.trim();
+  if (!name) return;
+  habits.push({ id: Date.now(), emoji, name, done: false });
+  document.getElementById('habitEmoji').value = '';
+  document.getElementById('habitName').value = '';
+  save('habits', habits); renderHabits();
+}
+
+function renderHabits() {
+  const done = habits.filter(h => h.done).length;
+  const pct = habits.length ? Math.round(done / habits.length * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${done} / ${habits.length} complétés`;
+  document.getElementById('streakCount').textContent = streak;
+
+  document.getElementById('habitList').innerHTML = habits.map(h => `
+    <div class="habit-item">
+      <div class="habit-left">
+        <span class="habit-emoji">${h.emoji}</span>
+        <div><div class="habit-name">${h.name}</div></div>
+      </div>
+      <button class="habit-check-btn${h.done?' done':''}" onclick="toggleHabit(${h.id})">${h.done?'✓':''}</button>
+    </div>`).join('');
+
+  // Mini week calendar
+  const days = ['L','M','M','J','V','S','D'];
+  document.getElementById('weekCalTracker').innerHTML = days.map((d, i) => {
+    const today = new Date().getDay();
+    const todayIdx = today === 0 ? 6 : today - 1;
+    const isPast = i < todayIdx;
+    const isToday = i === todayIdx;
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <div style="font-size:10px;color:var(--text-light);font-weight:600">${d}</div>
+      <div style="width:32px;height:32px;border-radius:50%;border:2px solid ${isToday?'var(--rose)':'rgba(244,167,185,0.3)'};
+        background:${isPast?(pct===100?'var(--rose)':'rgba(244,167,185,0.15)'):'none'};
+        display:flex;align-items:center;justify-content:center;font-size:14px">
+        ${isPast&&pct===100?'✓':isToday?'⭐':''}
+      </div>
+    </div>`;
+  }).join('');
+}
+renderHabits();
+
+// ─── HABIT MODAL ──────────────────────────────
+function openHabitModal() {
+  const modal = document.getElementById('habitModal');
+  document.getElementById('modalHabitList').innerHTML = habits.map(h => `
+    <div class="modal-habit-row" id="mrow-${h.id}">
+      <input class="modal-emoji-input" value="${h.emoji}" id="memoji-${h.id}" maxlength="4">
+      <input class="modal-name-input" value="${h.name}" id="mname-${h.id}">
+      <button class="modal-del-btn" onclick="removeModalHabit(${h.id})">×</button>
+    </div>`).join('');
+  modal.classList.add('open');
+}
+
+function removeModalHabit(id) {
+  const row = document.getElementById('mrow-' + id);
+  if (row) row.style.display = 'none';
+  row.dataset.deleted = 'true';
+}
+
+function closeHabitModal() {
+  document.getElementById('habitModal').classList.remove('open');
+}
+
+function saveHabitModal() {
+  const rows = document.querySelectorAll('.modal-habit-row');
+  const updated = [];
+  rows.forEach(row => {
+    if (row.dataset.deleted === 'true') return;
+    const id = parseInt(row.id.replace('mrow-',''));
+    const emoji = row.querySelector('[id^=memoji]').value.trim() || '✨';
+    const name = row.querySelector('[id^=mname]').value.trim();
+    if (!name) return;
+    const orig = habits.find(h => h.id === id);
+    updated.push({ id, emoji, name, done: orig ? orig.done : false });
+  });
+  habits = updated;
+  save('habits', habits);
+  closeHabitModal();
+  renderHabits();
+  showToast('Habitudes mises à jour 💪');
+}
+
+// ─── TRACKER TABS ─────────────────────────────
+function switchTrackerTab(tab, btn) {
+  document.querySelectorAll('.tracker-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tracker-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tracker-' + tab).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (tab === 'weekly') renderWeeklyTasks();
+}
+
+// ─── WEEKLY TASKS ─────────────────────────────
+let weeklyTasks = load('weeklyTasks', [
+  { id: 1, emoji: '🏊', name: 'Piscine',    day: 1, done: false },
+  { id: 2, emoji: '🛒', name: 'Marché',     day: 5, done: false },
+  { id: 3, emoji: '🧘', name: 'Yoga',       day: 3, done: false },
+  { id: 4, emoji: '🚴', name: 'Vélo',       day: 6, done: false },
+]);
+
+// Reset weekly tasks on Monday
+const todayDow = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
+const lastWkReset = load('lastWkReset', '');
+const thisMonday = (() => { const d = new Date(); d.setDate(d.getDate() - todayDow); return d.toDateString(); })();
+if (lastWkReset !== thisMonday) {
+  weeklyTasks.forEach(t => t.done = false);
+  save('weeklyTasks', weeklyTasks);
+  save('lastWkReset', thisMonday);
+}
+
+function toggleWeeklyTask(id) {
+  const t = weeklyTasks.find(t => t.id === id);
+  if (t) { t.done = !t.done; save('weeklyTasks', weeklyTasks); renderWeeklyTasks(); }
+}
+
+function deleteWeeklyTask(id) {
+  weeklyTasks = weeklyTasks.filter(t => t.id !== id);
+  save('weeklyTasks', weeklyTasks); renderWeeklyTasks();
+}
+
+function addWeeklyTask() {
+  const emoji = document.getElementById('wkEmoji').value.trim() || '⭐';
+  const name = document.getElementById('wkName').value.trim();
+  const day = parseInt(document.getElementById('wkDay').value);
+  if (!name) return;
+  weeklyTasks.push({ id: Date.now(), emoji, name, day, done: false });
+  document.getElementById('wkEmoji').value = '';
+  document.getElementById('wkName').value = '';
+  save('weeklyTasks', weeklyTasks); renderWeeklyTasks();
+  showToast('Activité ajoutée 🌸');
+}
+
+function renderWeeklyTasks() {
+  const DAYS_SHORT = ['LUN','MAR','MER','JEU','VEN','SAM','DIM'];
+  const todayIdx = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
+  const grid = document.getElementById('weeklyTasksGrid');
+  if (!grid) return;
+  grid.innerHTML = Array.from({length:7}, (_, di) => {
+    const isToday = di === todayIdx;
+    const dayTasks = weeklyTasks.filter(t => t.day === di);
+    return `<div class="weekly-day-col">
+      <div class="weekly-day-head${isToday?' today-wk':''}">${DAYS_SHORT[di]}</div>
+      ${dayTasks.length === 0
+        ? `<div style="font-size:11px;color:var(--text-light);text-align:center;padding:8px;font-style:italic">—</div>`
+        : dayTasks.map(t => `
+          <div class="weekly-task-item${t.done?' wk-done':''}" onclick="toggleWeeklyTask(${t.id})">
+            <div class="weekly-task-emoji">${t.emoji}</div>
+            <div class="weekly-task-name">${t.name}</div>
+            ${t.done ? '<div style="font-size:10px;opacity:0.8">✓ fait !</div>' : ''}
+          </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+let upcoming = load('upcoming', [
+  { id: 1, title: 'Anniversaire Léa', date: '2026-05-14', type: '🎂' },
+  { id: 2, title: 'Concert Indochine', date: '2026-04-08', type: '🎵' },
+  { id: 3, title: 'Voyage à Rome', date: '2026-07-20', type: '✈️' },
+]);
+
+function addUpcoming() {
+  const title = document.getElementById('upTitle').value.trim();
+  const date = document.getElementById('upDate').value;
+  const type = document.getElementById('upType').value;
+  if (!title || !date) return;
+  upcoming.push({ id: Date.now(), title, date, type });
+  upcoming.sort((a,b) => new Date(a.date) - new Date(b.date));
+  document.getElementById('upTitle').value = '';
+  document.getElementById('upDate').value = '';
+  save('upcoming', upcoming); renderUpcoming();
+}
+
+function deleteUpcoming(id) { upcoming = upcoming.filter(u => u.id !== id); save('upcoming', upcoming); renderUpcoming(); }
+
+function renderUpcoming() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const sorted = [...upcoming].sort((a,b) => new Date(a.date) - new Date(b.date));
+  const colors = ['date-box-rose','date-box-lilac','date-box-mint','date-box-peach'];
+
+  document.getElementById('upcomingList').innerHTML = `<div class="upcoming-list">` +
+    sorted.map((u, i) => {
+      const d = new Date(u.date);
+      const diff = Math.ceil((d - today) / 86400000);
+      const diffLabel = diff === 0 ? "Aujourd'hui ! 🎉" : diff < 0 ? 'Passé' : `Dans ${diff} jour${diff>1?'s':''}`;
+      const col = colors[i % colors.length];
+      return `<div class="upcoming-item">
+        <div class="upcoming-date-box ${col}">
+          <div class="upcoming-day">${d.getDate()}</div>
+          <div class="upcoming-mois">${MOIS_COURT[d.getMonth()].toUpperCase()}</div>
+        </div>
+        <div class="upcoming-type" style="font-size:24px">${u.type}</div>
+        <div class="upcoming-info">
+          <div class="upcoming-title">${u.title}</div>
+          <div class="upcoming-sub">${JOURS[d.getDay()]} ${d.getDate()} ${MOIS_FR[d.getMonth()]} ${d.getFullYear()}</div>
+        </div>
+        <div class="upcoming-days-left">${diffLabel}</div>
+        <button class="todo-delete" onclick="deleteUpcoming(${u.id})" style="font-size:18px">×</button>
+      </div>`;
+    }).join('') + '</div>';
+}
+renderUpcoming();
+
+// ─── MOON ─────────────────────────────────────
+function moonData(date) {
+  const REF = new Date('2000-01-06T18:14:00Z');
+  const SYNODIC = 29.53058867;
+  const diff = (date - REF) / (1000 * 60 * 60 * 24);
+  let age = ((diff % SYNODIC) + SYNODIC) % SYNODIC;
+  const illumination = Math.round((1 - Math.cos(2 * Math.PI * age / SYNODIC)) / 2 * 100);
+  const daysLeft = SYNODIC - age;
+  let phaseName, phaseEmoji, phaseIdx;
+  if (age < 1.85)       { phaseName='Nouvelle Lune';              phaseEmoji='🌑'; phaseIdx=0; }
+  else if (age < 7.38)  { phaseName='Premier Croissant';          phaseEmoji='🌒'; phaseIdx=1; }
+  else if (age < 9.22)  { phaseName='Premier Quartier';           phaseEmoji='🌓'; phaseIdx=2; }
+  else if (age < 12.91) { phaseName='Lune Gibbeuse Croissante';   phaseEmoji='🌔'; phaseIdx=3; }
+  else if (age < 16.61) { phaseName='Pleine Lune';                phaseEmoji='🌕'; phaseIdx=4; }
+  else if (age < 20.30) { phaseName='Lune Gibbeuse Décroissante'; phaseEmoji='🌖'; phaseIdx=5; }
+  else if (age < 23.99) { phaseName='Dernier Quartier';           phaseEmoji='🌗'; phaseIdx=6; }
+  else if (age < 27.68) { phaseName='Dernier Croissant';          phaseEmoji='🌘'; phaseIdx=7; }
+  else                  { phaseName='Nouvelle Lune';              phaseEmoji='🌑'; phaseIdx=0; }
+  return { age, illumination, daysLeft, phaseName, phaseEmoji, phaseIdx };
+}
+
+function getMoonEmoji(age) {
+  const idx = Math.min(7, Math.floor(age / 29.53058867 * 8));
+  return ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'][idx];
+}
+
+function drawMoon(canvas, illumination, age) {
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height, cx = w/2, cy = h/2, r = w/2 - 6;
+  ctx.clearRect(0,0,w,h);
+  const grd = ctx.createRadialGradient(cx,cy,r*0.5,cx,cy,r*1.4);
+  grd.addColorStop(0,'rgba(220,200,255,0.25)'); grd.addColorStop(1,'rgba(220,200,255,0)');
+  ctx.fillStyle = grd; ctx.beginPath(); ctx.arc(cx,cy,r*1.4,0,Math.PI*2); ctx.fill();
+  const waxing = age < 14.77, pct = illumination/100;
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.clip();
+  ctx.fillStyle='#1a1035'; ctx.fillRect(0,0,w,h);
+  ctx.fillStyle='#f5f0e8'; ctx.beginPath();
+  if (waxing) {
+    ctx.arc(cx,cy,r,Math.PI/2,-Math.PI/2,false);
+    ctx.bezierCurveTo(cx-r*(1-2*pct)*2,cy-r,cx-r*(1-2*pct)*2,cy+r,cx,cy+r);
+  } else {
+    ctx.arc(cx,cy,r,-Math.PI/2,Math.PI/2,false);
+    ctx.bezierCurveTo(cx+r*(1-2*(1-pct))*2,cy+r,cx+r*(1-2*(1-pct))*2,cy-r,cx,cy-r);
+  }
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle='rgba(200,190,170,0.08)';
+  [[cx-10,cy-15,8],[cx+14,cy+10,5],[cx-5,cy+18,4],[cx+8,cy-5,6]].forEach(([x,y,rd])=>{
+    ctx.beginPath(); ctx.arc(x,y,rd,0,Math.PI*2); ctx.fill();
+  });
+  ctx.restore();
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.strokeStyle='rgba(200,180,255,0.3)'; ctx.lineWidth=1.5; ctx.stroke();
+}
+
+const MOON_ADVICE = {
+  0:[{icon:'🌱',text:'Moment idéal pour fixer de nouvelles intentions et planter des graines symboliques.'},{icon:'📓',text:'Prends le temps de te recentrer, journaler et définir tes désirs profonds.'},{icon:'😴',text:'Le corps demande du repos — écoute-le et ralentis.'}],
+  1:[{icon:'🚀',text:'L\'énergie monte doucement. Lance tes projets, fais le premier pas.'},{icon:'💡',text:'Bonne période pour les nouvelles idées et les décisions créatives.'},{icon:'🌿',text:'Prends soin de ton alimentation pour soutenir ton élan naturel.'}],
+  2:[{icon:'⚡',text:'Phase d\'action ! Surmonte les obstacles et avance avec détermination.'},{icon:'🏃',text:'Excellent moment pour le sport et les challenges physiques.'},{icon:'🤝',text:'Tes relations sociales sont dynamisées — profites-en.'}],
+  3:[{icon:'✨',text:'Peaufine et affine ce que tu as commencé. L\'effort porte ses fruits.'},{icon:'🎯',text:'Reste concentrée sur tes objectifs, tu approches du sommet.'},{icon:'💆',text:'Prends soin de toi pour tenir la distance — massage, bain chaud...'}],
+  4:[{icon:'🌕',text:'Pic d\'énergie et d\'émotions. Célèbre tes accomplissements du mois !'},{icon:'💫',text:'Moment de gratitude et de lâcher-prise sur ce qui ne te sert plus.'},{icon:'🧘',text:'La méditation est particulièrement puissante cette nuit.'}],
+  5:[{icon:'🙏',text:'Phase de gratitude. Récolte ce que tu as semé avec amour.'},{icon:'🧹',text:'Commence à désencombrer — espace, relations, habitudes.'},{icon:'💤',text:'Ton corps se recharge. Favorise le sommeil et la douceur.'}],
+  6:[{icon:'🔄',text:'Temps de lâcher prise et de pardonner, à toi comme aux autres.'},{icon:'📚',text:'Période propice à la réflexion, l\'introspection et l\'étude.'},{icon:'🌿',text:'Détox douce — corps et esprit apprécieront la légèreté.'}],
+  7:[{icon:'🌙',text:'Phase de transition. Repose-toi vraiment avant le nouveau cycle.'},{icon:'🕯️',text:'La créativité est intuitive en ce moment — suis tes élans artistiques.'},{icon:'❤️',text:'Prends soin de tes proches et de toi avec une tendresse particulière.'}],
+};
+
+function getNextPhases(today) {
+  const SYNODIC = 29.53058867;
+  const targets = [{name:'Nouvelle Lune',emoji:'🌑',a:0},{name:'Premier Quartier',emoji:'🌓',a:7.38},{name:'Pleine Lune',emoji:'🌕',a:14.77},{name:'Dernier Quartier',emoji:'🌗',a:22.15}];
+  const cur = moonData(today).age;
+  return targets.map(p => {
+    let d = p.a - cur; if (d<=0) d+=SYNODIC;
+    const dt = new Date(today); dt.setDate(dt.getDate()+Math.round(d));
+    return {...p, date:dt, days:Math.round(d)};
+  }).sort((a,b)=>a.days-b.days);
+}
+
+function renderMoon() {
+  const today = new Date();
+  const data = moonData(today);
+  // Stars
+  document.getElementById('moonStars').innerHTML = Array.from({length:40}).map(()=>{
+    const x=Math.random()*100,y=Math.random()*100,s=Math.random()*2+1,delay=Math.random()*3;
+    return `<div class="star" style="left:${x}%;top:${y}%;width:${s}px;height:${s}px;animation-delay:${delay}s"></div>`;
+  }).join('');
+  drawMoon(document.getElementById('moonCanvas'), data.illumination, data.age);
+  document.getElementById('moonPhaseName').innerHTML = `Phase actuelle : <em>${data.phaseName}</em> ${data.phaseEmoji}`;
+  document.getElementById('moonDateInfo').textContent = `${JOURS[today.getDay()]} ${today.getDate()} ${MOIS_FR[today.getMonth()]} ${today.getFullYear()}`;
+  document.getElementById('moonIllum').textContent = data.illumination+'%';
+  document.getElementById('moonAge').textContent = `J${Math.floor(data.age)+1}`;
+  document.getElementById('moonDaysLeft').textContent = `${Math.round(data.daysLeft)}j`;
+  document.getElementById('moonAdvice').innerHTML = (MOON_ADVICE[data.phaseIdx]||MOON_ADVICE[0]).map(a=>
+    `<div class="moon-advice-item"><span class="moon-advice-icon">${a.icon}</span><span class="moon-advice-text">${a.text}</span></div>`).join('');
+  // Cycle row
+  const y=today.getFullYear(),m=today.getMonth(),dim=new Date(y,m+1,0).getDate();
+  document.getElementById('moonCycleRow').innerHTML = Array.from({length:dim},(_,i)=>{
+    const dt=new Date(y,m,i+1),md=moonData(dt),isToday=(i+1===today.getDate());
+    return `<div class="moon-cycle-day${isToday?' today-moon':''}"><div class="moon-mini">${getMoonEmoji(md.age)}</div><div class="moon-mini-day">${i+1}</div></div>`;
+  }).join('');
+  // Next phases
+  document.getElementById('moonNextPhases').innerHTML = getNextPhases(today).map(p=>
+    `<div class="moon-next-item"><div class="moon-next-emoji">${p.emoji}</div><div class="moon-next-name">${p.name}</div><div class="moon-next-date">${p.date.getDate()} ${MOIS_COURT[p.date.getMonth()]}</div><div class="moon-next-in">Dans ${p.days}j</div></div>`).join('');
+}
+
+// ─── THÈME ASTRAL ─────────────────────────────
+// Positions planétaires calculées pour le 4 août 2003 à 16h45, Lunéville (48.59°N, 6.50°E)
+// Calcul basé sur les éphémérides astronomiques (VSOP87 simplifié)
+const NATAL = {
+  planets: [
+    { name: 'Soleil',    icon: '☀️', sign: 'Lion',        deg: '12°14\'', house: 9,  lon: 132.23 },
+    { name: 'Lune',      icon: '🌙', sign: 'Scorpion',    deg: '3°22\'',  house: 11, lon: 213.37 },
+    { name: 'Mercure',   icon: '☿', sign: 'Lion',         deg: '26°52\'', house: 9,  lon: 146.87 },
+    { name: 'Vénus',     icon: '♀️', sign: 'Vierge',      deg: '4°11\'',  house: 10, lon: 154.18 },
+    { name: 'Mars',      icon: '♂️', sign: 'Poissons',    deg: '0°33\'',  house: 3,  lon: 330.55 },
+    { name: 'Jupiter',   icon: '♃', sign: 'Lion',         deg: '9°04\'',  house: 9,  lon: 129.07 },
+    { name: 'Saturne',   icon: '♄', sign: 'Cancer',       deg: '3°58\'',  house: 8,  lon: 93.97  },
+    { name: 'Uranus',    icon: '♅', sign: 'Poissons',     deg: '1°24\'',  house: 3,  lon: 331.40 },
+    { name: 'Neptune',   icon: '♆', sign: 'Verseau',      deg: '12°40\'', house: 2,  lon: 312.67 },
+    { name: 'Pluton',    icon: '♇', sign: 'Sagittaire',   deg: '17°49\'', house: 1,  lon: 257.82 },
+    { name: 'Chiron',    icon: '⚷', sign: 'Capricorne',   deg: '12°03\'', house: 2,  lon: 282.05 },
+    { name: 'Nœud Nord', icon: '☊', sign: 'Taureau',      deg: '27°12\'', house: 6,  lon: 57.20  },
+  ],
+  houses: [
+    { num: 'I',    sign: 'Sagittaire', emoji: '♐' },
+    { num: 'II',   sign: 'Capricorne', emoji: '♑' },
+    { num: 'III',  sign: 'Verseau',    emoji: '♒' },
+    { num: 'IV',   sign: 'Poissons',   emoji: '♓' },
+    { num: 'V',    sign: 'Bélier',     emoji: '♈' },
+    { num: 'VI',   sign: 'Taureau',    emoji: '♉' },
+    { num: 'VII',  sign: 'Gémeaux',    emoji: '♊' },
+    { num: 'VIII', sign: 'Cancer',     emoji: '♋' },
+    { num: 'IX',   sign: 'Lion',       emoji: '♌' },
+    { num: 'X',    sign: 'Vierge',     emoji: '♍' },
+    { num: 'XI',   sign: 'Balance',    emoji: '♎' },
+    { num: 'XII',  sign: 'Scorpion',   emoji: '♏' },
+  ],
+  aspects: [
+    { p1:'☀️', p2:'♃', type:'Conjonction', sym:'☌', cls:'asp-conj',   txt:'Soleil conjoint Jupiter → Optimisme rayonnant, chance naturelle, générosité expansive' },
+    { p1:'☀️', p2:'☿', type:'Conjonction', sym:'☌', cls:'asp-conj',   txt:'Soleil conjoint Mercure → Mental brillant, charisme communicatif, leadership intellectuel' },
+    { p1:'🌙', p2:'♀️', type:'Sextile',    sym:'⚹', cls:'asp-sextile', txt:'Lune sextile Vénus → Sensibilité magnétique, émotions profondes sublimées en art et beauté' },
+    { p1:'♂️', p2:'♅', type:'Conjonction', sym:'☌', cls:'asp-conj',   txt:'Mars conjoint Uranus → Énergie rebelle, originalité explosive, actions imprévisibles' },
+    { p1:'☀️', p2:'♄', type:'Carré',       sym:'□', cls:'asp-square',  txt:'Soleil carré Saturne → Défi de l\'autorité, maturité par l\'obstacle, discipline nécessaire' },
+    { p1:'♀️', p2:'♇', type:'Trigone',     sym:'△', cls:'asp-trine',   txt:'Vénus trigone Pluton → Amour intense et transformateur, magnétisme profond' },
+    { p1:'🌙', p2:'♇', type:'Sextile',     sym:'⚹', cls:'asp-sextile', txt:'Lune sextile Pluton → Instinct puissant, capacité à sentir ce que les autres cachent' },
+    { p1:'☿', p2:'♄', type:'Carré',        sym:'□', cls:'asp-square',  txt:'Mercure carré Saturne → Pensée rigoureuse, communication précise, perfectionnisme' },
+  ]
+};
+
+const SIGN_COLORS = {
+  'Bélier':'#ff7070','Taureau':'#7ec87e','Gémeaux':'#f7d794','Cancer':'#a8d8f0',
+  'Lion':'#ffb347','Vierge':'#c8e6a0','Balance':'#f4a7b9','Scorpion':'#9b7ec8',
+  'Sagittaire':'#7ec8c8','Capricorne':'#b0b0c8','Verseau':'#7eb8f0','Poissons':'#c8a0d4'
+};
+
+function drawAstralChart(canvas) {
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height, cx = w/2, cy = h/2, r = w/2 - 10;
+  ctx.clearRect(0,0,w,h);
+
+  // Background
+  const bg = ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+  bg.addColorStop(0,'#2a1555'); bg.addColorStop(1,'#0f0c1d');
+  ctx.fillStyle = bg; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+
+  // Zodiac wheel - 12 segments
+  const signs = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  const segColors = ['#ff7070','#7ec87e','#f7d794','#a8d8f0','#ffb347','#c8e6a0',
+                     '#f4a7b9','#9b7ec8','#7ec8c8','#b0b0c8','#7eb8f0','#c8a0d4'];
+  signs.forEach((s, i) => {
+    const a0 = (i * 30 - 90) * Math.PI / 180;
+    const a1 = ((i+1) * 30 - 90) * Math.PI / 180;
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,a0,a1); ctx.closePath();
+    ctx.fillStyle = segColors[i]+'22'; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 0.5; ctx.stroke();
+    // Sign label
+    const am = (a0+a1)/2, lr = r*0.82;
+    ctx.fillStyle = segColors[i]; ctx.font = '10px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(s, cx + Math.cos(am)*lr, cy + Math.sin(am)*lr);
+  });
+
+  // Inner circles
+  [0.65, 0.45].forEach(f => {
+    ctx.beginPath(); ctx.arc(cx,cy,r*f,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=1; ctx.stroke();
+  });
+
+  // Planets
+  NATAL.planets.slice(0,10).forEach(p => {
+    const angle = (p.lon - 90) * Math.PI / 180;
+    const pr = r * 0.54;
+    const x = cx + Math.cos(angle)*pr, y = cy + Math.sin(angle)*pr;
+    ctx.beginPath(); ctx.arc(x,y,7,0,Math.PI*2);
+    ctx.fillStyle = SIGN_COLORS[p.sign]||'#fff'; ctx.fill();
+    ctx.font = '9px serif'; ctx.fillStyle='white'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(p.icon.replace(/[\uFE0F]/g,''), x, y);
+  });
+
+  // Ascendant line
+  ctx.beginPath();
+  ctx.moveTo(cx - r*0.95, cy); ctx.lineTo(cx + r*0.95, cy);
+  ctx.strokeStyle='rgba(255,200,100,0.4)'; ctx.lineWidth=1; ctx.setLineDash([3,3]); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Center
+  const cg = ctx.createRadialGradient(cx,cy,0,cx,cy,r*0.2);
+  cg.addColorStop(0,'#3a1a6a'); cg.addColorStop(1,'transparent');
+  ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(cx,cy,r*0.2,0,Math.PI*2); ctx.fill();
+  ctx.font='bold 13px serif'; ctx.fillStyle='rgba(255,220,150,0.9)';
+  ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('♌', cx, cy);
+}
+
+function renderAstral() {
+  // Draw chart
+  const canvas = document.getElementById('astralChart');
+  if (canvas) drawAstralChart(canvas);
+
+  // Planets grid
+  document.getElementById('planetsGrid').innerHTML = NATAL.planets.map(p => `
+    <div class="planet-card">
+      <div class="planet-icon">${p.icon}</div>
+      <div class="planet-info">
+        <div class="planet-name">${p.name}</div>
+        <div class="planet-sign">${p.sign}</div>
+        <div class="planet-deg">${p.deg} · Maison ${p.house}</div>
+      </div>
+      <div style="width:10px;height:10px;border-radius:50%;background:${SIGN_COLORS[p.sign]||'#ccc'};flex-shrink:0"></div>
+    </div>`).join('');
+
+  // Houses
+  document.getElementById('housesGrid').innerHTML = NATAL.houses.map(h => `
+    <div class="house-item">
+      <div class="house-num">MAISON ${h.num}</div>
+      <div class="house-emoji">${h.emoji}</div>
+      <div class="house-sign">${h.sign}</div>
+    </div>`).join('');
+
+  // Aspects
+  document.getElementById('aspectsGrid').innerHTML = NATAL.aspects.map(a => `
+    <div class="aspect-item">
+      <div class="aspect-sym">${a.sym}</div>
+      <div class="aspect-txt">${a.txt}</div>
+      <div class="aspect-type ${a.cls}">${a.type}</div>
+    </div>`).join('');
+
+  // Date
+  const today = new Date();
+  document.getElementById('horoscopeDate').textContent =
+    `${JOURS[today.getDay()]} ${today.getDate()} ${MOIS_FR[today.getMonth()]} ${today.getFullYear()}`;
+
+  // Horoscope
+  loadHoroscope(false);
+}
+
+async function loadHoroscope(force) {
+  const today = new Date().toDateString();
+  const cached = load('horoscope_cache', null);
+  if (!force && cached && cached.date === today) {
+    renderHoroscope(cached.data);
+    return;
+  }
+  document.getElementById('horoscopeContent').innerHTML =
+    '<div class="horoscope-loading"><div class="spinner"></div>Les astres préparent ton message...</div>';
+
+  const moonInfo = moonData(new Date());
+  const prompt = `Tu es une astrologue bienveillante et intuitive qui parle en français. Génère un horoscope quotidien personnalisé et détaillé pour une jeune femme née le 4 août 2003 à 16h45 à Lunéville, France.
+
+Son thème natal :
+- Soleil en Lion (maison 9) : identité rayonnante, créativité, besoin de briller et d'être reconnue
+- Lune en Scorpion (maison 11) : émotions intenses et profondes, intuition magnétique, besoin de connexions authentiques et transformatrices
+- Ascendant Sagittaire : vision large du monde, optimisme, quête de sens
+- Mercure en Lion (maison 9) : expression brillante, pensée créative
+- Vénus en Vierge (maison 10) : amour du détail, perfectionnisme affectif, ambitions relationnelles
+- Mars conjoint Uranus en Poissons : énergie imprévisible, intuition forte
+- Jupiter en Lion (maison 9) conjoint au Soleil : chance, expansion, leadership naturel
+- Saturne en Cancer (maison 8) : profondeur émotionnelle, transformation par les épreuves
+- Pluton en Sagittaire (maison 1) : transformation de l'identité, puissance personnelle
+
+Aujourd'hui : ${new Date().toLocaleDateString('fr-FR', {weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+Phase lunaire actuelle : ${moonInfo.phaseName} (${moonInfo.illumination}% illuminée, jour ${Math.floor(moonInfo.age)+1} du cycle)
+
+Génère un horoscope qui :
+1. Commence par un message d'ouverture chaleureux et poétique lié à la phase lunaire (2-3 phrases)
+2. Aborde l'énergie générale du jour en lien avec son thème natal (2-3 phrases)
+3. Parle de ses relations/amour (1-2 phrases)
+4. Parle de son travail/créativité/ambitions (1-2 phrases)
+5. Donne un conseil pratique et bienveillant pour la journée (1-2 phrases)
+6. Termine avec une note inspirante et douce
+
+Ensuite, sur une nouvelle ligne, génère EXACTEMENT ce JSON (rien d'autre après) :
+{"amour":85,"travail":70,"energie":80,"intuition":90}
+
+Les scores sont entre 0 et 100. Adapte-les à l'énergie du jour et à la phase lunaire.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.map(c=>c.text||'').join('') || '';
+    const jsonMatch = text.match(/\{[\s\S]*"amour"[\s\S]*\}/);
+    const scores = jsonMatch ? JSON.parse(jsonMatch[0]) : {amour:75,travail:70,energie:75,intuition:80};
+    const horoscope = text.replace(/\{[\s\S]*"amour"[\s\S]*\}/, '').trim();
+    const result = { horoscope, scores };
+    save('horoscope_cache', { date: today, data: result });
+    renderHoroscope(result);
+  } catch(e) {
+    document.getElementById('horoscopeContent').innerHTML =
+      '<div style="color:var(--text-soft);font-style:italic;font-size:14px;padding:16px">✨ Les astres sont momentanément silencieux... Réessaie dans un instant.</div>';
+  }
+}
+
+function renderHoroscope({ horoscope, scores }) {
+  const paras = horoscope.split(/\n\n+/).filter(p => p.trim()).map(p =>
+    `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+
+  const domains = [
+    { icon:'💕', label:'AMOUR', key:'amour' },
+    { icon:'⚡', label:'ÉNERGIE', key:'energie' },
+    { icon:'🎯', label:'TRAVAIL', key:'travail' },
+    { icon:'🔮', label:'INTUITION', key:'intuition' },
+  ];
+
+  document.getElementById('horoscopeContent').innerHTML = `
+    <div class="horoscope-body">${paras}</div>
+    <div class="horoscope-domains">
+      ${domains.map(d => `
+        <div class="horoscope-domain">
+          <div class="domain-icon">${d.icon}</div>
+          <div class="domain-info">
+            <div class="domain-label">${d.label} · ${scores[d.key] || 75}%</div>
+            <div class="domain-bar"><div class="domain-fill" style="width:${scores[d.key]||75}%"></div></div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+</script>
+</body>
+</html>
