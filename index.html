@@ -255,8 +255,8 @@
   /* Week view */
   .week-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
   .week-name { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--text); }
-  .week-grid { display: grid; grid-template-columns: 56px repeat(7,1fr); border: 1px solid rgba(244,167,185,0.2); border-radius: var(--radius); overflow: hidden; }
-  .week-day-col { border-left: 1px solid rgba(244,167,185,0.15); }
+  .week-grid { display: grid; grid-template-columns: 44px repeat(7,1fr); border: 1px solid rgba(244,167,185,0.2); border-radius: var(--radius); overflow: hidden; }
+  .week-day-col { border-left: 1px solid rgba(244,167,185,0.15); position: relative; }
   .week-day-head {
     padding: 10px 6px; text-align: center;
     background: rgba(255,255,255,0.6);
@@ -266,16 +266,20 @@
   }
   .week-day-head.today-head { background: var(--rose); color: white; }
   .week-time-col .week-day-head { background: rgba(255,255,255,0.4); }
-  .week-slot { height: 44px; border-bottom: 1px solid rgba(244,167,185,0.08); position: relative; }
-  .week-time-label { font-size: 10px; color: var(--text-light); padding: 4px 6px; text-align: right; }
+  .week-slot { height: 22px; border-bottom: 1px solid rgba(244,167,185,0.06); position: relative; }
+  .week-slot.hour-start { border-bottom-color: rgba(244,167,185,0.18); }
+  .week-time-label { font-size: 9px; color: var(--text-light); padding: 3px 6px; text-align: right; line-height: 1; }
   .week-event {
-    position: absolute; left: 2px; right: 2px; top: 2px; bottom: 2px;
+    position: absolute; left: 2px; right: 2px;
     border-radius: 6px;
-    padding: 2px 6px;
-    font-size: 10px; font-weight: 500; color: white;
-    overflow: hidden; white-space: nowrap;
-    cursor: pointer;
+    padding: 3px 6px;
+    font-size: 10px; font-weight: 600; color: white;
+    overflow: hidden;
+    cursor: pointer; z-index: 2;
+    display: flex; flex-direction: column; justify-content: flex-start;
   }
+  .week-event-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .week-event-time { font-size: 9px; opacity: 0.85; font-weight: 400; white-space: nowrap; }
   .ev-sport { background: linear-gradient(135deg,#a8d8a8,#7bc47b); }
   .ev-social { background: linear-gradient(135deg,var(--rose),var(--rose-deep)); }
   .ev-perso { background: linear-gradient(135deg,var(--lilac-deep),#b08acf); }
@@ -863,6 +867,25 @@
   .ev-modal-input:focus { border-color:var(--rose); }
   .ev-modal-actions { display:flex; gap:10px; justify-content:space-between; margin-top:4px; }
 
+  /* ─── COLOR PICKER ─── */
+  .color-picker-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .color-swatch {
+    width:26px; height:26px; border-radius:50%; cursor:pointer;
+    border:2px solid transparent; transition:all 0.15s; flex-shrink:0;
+  }
+  .color-swatch:hover { transform:scale(1.15); }
+  .color-swatch.selected { border-color: var(--text); transform:scale(1.15); }
+  .color-swatch-label { font-size:11px; color:var(--text-soft); }
+
+  /* ─── RECURRENCE TOGGLE ─── */
+  .recurrence-toggle { display:flex; gap:6px; }
+  .rec-btn {
+    padding:6px 14px; border-radius:20px; border:1.5px solid rgba(244,167,185,0.3);
+    background:none; cursor:pointer; font-family:'DM Sans',sans-serif;
+    font-size:12px; font-weight:500; color:var(--text-soft); transition:all 0.2s;
+  }
+  .rec-btn.active { background:var(--rose); color:white; border-color:var(--rose); }
+
   /* SCROLLBAR */
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -891,6 +914,13 @@
     <button class="nav-btn" onclick="showSection('astral', this)">⭐ Thème Astral</button>
   </nav>
   <div class="date-display" id="dateDisplay"></div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="btn-outline" style="font-size:12px;padding:6px 12px;white-space:nowrap" onclick="exportData()">💾 Sauvegarder</button>
+    <label class="btn-outline" style="font-size:12px;padding:6px 12px;cursor:pointer;white-space:nowrap;margin:0">
+      📂 Restaurer
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    </label>
+  </div>
 </header>
 
 <!-- ══════════════════ TODO ══════════════════ -->
@@ -969,20 +999,34 @@
     <button class="btn-outline" style="margin-top:12px" onclick="toggleAddEvent()">+ Ajouter un événement</button>
     <div class="add-event-form" id="addEventForm">
       <div style="font-size:13px;font-weight:600;color:var(--text-soft);margin-bottom:12px;letter-spacing:0.5px">NOUVEL ÉVÉNEMENT</div>
-      <div class="form-row">
+      <div class="form-row" style="flex-wrap:wrap;gap:10px">
         <input type="text" id="evTitle" placeholder="Nom de l'événement" style="flex:1;min-width:160px">
         <select id="evDay" style="min-width:100px">
           <option value="0">Lundi</option><option value="1">Mardi</option>
           <option value="2">Mercredi</option><option value="3">Jeudi</option>
           <option value="4">Vendredi</option><option value="5">Samedi</option><option value="6">Dimanche</option>
         </select>
-        <input type="number" id="evHour" placeholder="Heure (8)" min="6" max="22" style="width:90px">
-        <select id="evType">
-          <option value="ev-sport">🏃 Sport</option>
-          <option value="ev-social">🌸 Social</option>
-          <option value="ev-perso">💜 Perso</option>
-          <option value="ev-marche">🛒 Marché</option>
-        </select>
+        <select id="evStartTime" style="min-width:90px" onchange="updateDuration()"></select>
+        <select id="evEndTime" style="min-width:90px" onchange="updateDuration()"></select>
+        <span id="evDuration" style="font-size:12px;color:var(--rose-deep);font-weight:600;align-self:center;white-space:nowrap"></span>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--text-soft);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px">Couleur</div>
+          <div class="color-picker-row" id="evColorPicker"></div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--text-soft);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px">Récurrence</div>
+          <div class="recurrence-toggle">
+            <button class="rec-btn active" id="recBtnWeekly" onclick="setRecurrence('weekly')">🔁 Toutes les semaines</button>
+            <button class="rec-btn" id="recBtnOnce" onclick="setRecurrence('once')">📌 Semaine unique</button>
+          </div>
+          <div id="evDateField" style="display:none;margin-top:8px">
+            <input type="date" id="evSpecificDate" style="padding:8px 12px;border:1.5px solid rgba(244,167,185,0.3);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;">
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;justify-content:flex-end">
         <button class="btn-rose" onclick="addWeekEvent()">Ajouter</button>
       </div>
     </div>
@@ -1308,7 +1352,7 @@
       <input class="ev-modal-input" id="evEditTitle" type="text" placeholder="Nom de l'événement">
     </div>
     <div style="display:flex;gap:12px">
-      <div class="ev-modal-field" style="flex:1">
+      <div class="ev-modal-field" style="flex:1" id="evEditDayField">
         <div class="ev-modal-label">Jour</div>
         <select class="ev-modal-input" id="evEditDay">
           <option value="0">Lundi</option><option value="1">Mardi</option>
@@ -1316,19 +1360,29 @@
           <option value="4">Vendredi</option><option value="5">Samedi</option><option value="6">Dimanche</option>
         </select>
       </div>
-      <div class="ev-modal-field" style="width:90px">
-        <div class="ev-modal-label">Heure</div>
-        <input class="ev-modal-input" id="evEditHour" type="number" min="6" max="22" placeholder="9">
+      <div class="ev-modal-field" style="flex:1">
+        <div class="ev-modal-label">Début</div>
+        <select class="ev-modal-input" id="evEditStartTime" onchange="updateEditDuration()"></select>
+      </div>
+      <div class="ev-modal-field" style="flex:1">
+        <div class="ev-modal-label">Fin</div>
+        <select class="ev-modal-input" id="evEditEndTime" onchange="updateEditDuration()"></select>
       </div>
     </div>
+    <div style="font-size:12px;color:var(--rose-deep);font-weight:600;margin-bottom:12px" id="evEditDuration"></div>
     <div class="ev-modal-field">
-      <div class="ev-modal-label">Catégorie</div>
-      <select class="ev-modal-input" id="evEditType">
-        <option value="ev-sport">🏃 Sport</option>
-        <option value="ev-social">🌸 Social</option>
-        <option value="ev-perso">💜 Perso</option>
-        <option value="ev-marche">🛒 Marché</option>
-      </select>
+      <div class="ev-modal-label">Couleur</div>
+      <div class="color-picker-row" id="evEditColorPicker"></div>
+    </div>
+    <div class="ev-modal-field" id="evEditRecurrenceField">
+      <div class="ev-modal-label">Récurrence</div>
+      <div class="recurrence-toggle">
+        <button class="rec-btn active" id="editRecBtnWeekly" onclick="setEditRecurrence('weekly')">🔁 Toutes les semaines</button>
+        <button class="rec-btn" id="editRecBtnOnce" onclick="setEditRecurrence('once')">📌 Semaine unique</button>
+      </div>
+      <div id="evEditDateField" style="display:none;margin-top:8px">
+        <input type="date" id="evEditSpecificDate" class="ev-modal-input">
+      </div>
     </div>
     <div class="ev-modal-actions">
       <button class="btn-outline" style="color:#e05070;border-color:#e05070" onclick="deleteEvFromModal()">🗑 Supprimer</button>
@@ -1531,8 +1585,165 @@ let weekEvents = load('weekEvents', [
   { day: 5, hour: 10, title: 'Yoga 🧘', type: 'ev-sport' },
 ]);
 
-// Now that weekEvents is declared, render the month calendar
-renderMonth();
+// Now that weekEvents is declared, render both calendars once TIME HELPERS are loaded below
+
+
+// ─── PASTEL COLORS ────────────────────────────
+const PASTEL_COLORS = [
+  { hex:'#f4a7b9', name:'Rose' },
+  { hex:'#a8d8a8', name:'Vert' },
+  { hex:'#f7d794', name:'Jaune' },
+  { hex:'#a8d4f0', name:'Bleu' },
+  { hex:'#c9a8e0', name:'Violet' },
+  { hex:'#f7c5a0', name:'Pêche' },
+  { hex:'#a8e0d4', name:'Menthe' },
+  { hex:'#f0a8c8', name:'Fuchsia' },
+  { hex:'#b8d4a8', name:'Sauge' },
+  { hex:'#d4c0f0', name:'Lavande' },
+];
+let selectedColor = PASTEL_COLORS[0].hex;
+let editSelectedColor = PASTEL_COLORS[0].hex;
+let selectedRecurrence = 'weekly';
+let editSelectedRecurrence = 'weekly';
+
+function renderColorPicker(containerId, currentColor, onSelect) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = PASTEL_COLORS.map(c => `
+    <div class="color-swatch${currentColor === c.hex ? ' selected' : ''}"
+      style="background:${c.hex}" title="${c.name}"
+      onclick="(${onSelect.toString()})('${c.hex}', this, '${containerId}')">
+    </div>`).join('');
+}
+
+function onPickerSelect(hex, el, containerId) {
+  document.querySelectorAll(`#${containerId} .color-swatch`).forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  if (containerId === 'evColorPicker') selectedColor = hex;
+  else editSelectedColor = hex;
+}
+
+function setRecurrence(type) {
+  selectedRecurrence = type;
+  document.getElementById('recBtnWeekly').classList.toggle('active', type === 'weekly');
+  document.getElementById('recBtnOnce').classList.toggle('active', type === 'once');
+  document.getElementById('evDateField').style.display = type === 'once' ? 'block' : 'none';
+  // When "once", set the day picker from the date
+  if (type === 'once') {
+    const dateEl = document.getElementById('evSpecificDate');
+    if (!dateEl.value) {
+      const ws = getWeekStart(weekOffset);
+      const day = parseInt(document.getElementById('evDay').value);
+      const d = new Date(ws); d.setDate(ws.getDate() + day);
+      dateEl.value = d.toISOString().slice(0,10);
+    }
+  }
+}
+
+function setEditRecurrence(type) {
+  editSelectedRecurrence = type;
+  document.getElementById('editRecBtnWeekly').classList.toggle('active', type === 'weekly');
+  document.getElementById('editRecBtnOnce').classList.toggle('active', type === 'once');
+  document.getElementById('evEditDateField').style.display = type === 'once' ? 'block' : 'none';
+}
+
+// ─── TIME HELPERS ─────────────────────────────
+// Times stored as minutes since midnight (e.g. 9h30 = 570)
+const SLOT_MIN = 30; // 30 min per slot
+const DAY_START = 6 * 60;  // 6h00
+const DAY_END   = 23 * 60; // 23h00
+const TOTAL_SLOTS = (DAY_END - DAY_START) / SLOT_MIN; // 34 slots
+
+function buildTimeOptions(selectId, selectedVal) {
+  const el = document.getElementById(selectId);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let m = DAY_START; m <= DAY_END; m += SLOT_MIN) {
+    const h = Math.floor(m / 60);
+    const min = m % 60;
+    const label = `${h}h${min === 0 ? '00' : min}`;
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = label;
+    if (m === selectedVal) opt.selected = true;
+    el.appendChild(opt);
+  }
+}
+
+function updateDuration() {
+  const s = parseInt(document.getElementById('evStartTime').value);
+  const e = parseInt(document.getElementById('evEndTime').value);
+  const diff = e - s;
+  if (diff <= 0) {
+    document.getElementById('evDuration').textContent = '⚠️ Heure de fin invalide';
+    return;
+  }
+  const h = Math.floor(diff / 60), min = diff % 60;
+  document.getElementById('evDuration').textContent = `⏱ ${h > 0 ? h + 'h' : ''}${min > 0 ? min + 'min' : ''}`;
+}
+
+function updateEditDuration() {
+  const s = parseInt(document.getElementById('evEditStartTime').value);
+  const e = parseInt(document.getElementById('evEditEndTime').value);
+  const diff = e - s;
+  if (diff <= 0) { document.getElementById('evEditDuration').textContent = '⚠️'; return; }
+  const h = Math.floor(diff / 60), min = diff % 60;
+  document.getElementById('evEditDuration').textContent = `⏱ Durée : ${h > 0 ? h + 'h' : ''}${min > 0 ? min + 'min' : ''}`;
+}
+
+function getEventStyle(ev) {
+  const color = ev.color || '#f4a7b9';
+  return `background:${color};color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.2);`;
+}
+
+function fmtTime(mins) {
+  const h = Math.floor(mins/60), m = mins%60;
+  return `${h}h${m===0?'00':m}`;
+}
+
+function toggleAddEvent() {
+  const f = document.getElementById('addEventForm');
+  const opening = !f.classList.contains('open');
+  f.classList.toggle('open');
+  if (opening) {
+    selectedColor = PASTEL_COLORS[0].hex;
+    renderColorPicker('evColorPicker', selectedColor, onPickerSelect);
+    selectedRecurrence = 'weekly';
+    document.getElementById('recBtnWeekly').classList.add('active');
+    document.getElementById('recBtnOnce').classList.remove('active');
+    document.getElementById('evDateField').style.display = 'none';
+    buildTimeOptions('evStartTime', 9 * 60);
+    buildTimeOptions('evEndTime', 10 * 60);
+    updateDuration();
+  }
+}
+
+function addWeekEvent() {
+  const title = document.getElementById('evTitle').value.trim();
+  const day = parseInt(document.getElementById('evDay').value);
+  const startTime = parseInt(document.getElementById('evStartTime').value);
+  const endTime = parseInt(document.getElementById('evEndTime').value);
+  const color = selectedColor;
+  if (!title) return;
+  if (endTime <= startTime) { showToast('L\'heure de fin doit être après le début ⏰'); return; }
+
+  const ev = { id: Date.now(), title, color, startTime, endTime };
+
+  if (selectedRecurrence === 'once') {
+    const dateVal = document.getElementById('evSpecificDate').value;
+    if (!dateVal) { showToast('Choisis une date pour l\'événement unique 📅'); return; }
+    calEvents.push({ ...ev, date: dateVal, type: 'ev-custom', hour: Math.floor(startTime/60) });
+    save('calEvents', calEvents);
+  } else {
+    weekEvents.push({ ...ev, day, recurrence: 'weekly' });
+    save('weekEvents', weekEvents);
+  }
+  document.getElementById('evTitle').value = '';
+  document.getElementById('evSpecificDate').value = '';
+  renderWeek();
+  renderMonth();
+  showToast('Événement ajouté 🌸');
+}
 
 function renderWeek() {
   const ws = getWeekStart(weekOffset);
@@ -1541,48 +1752,177 @@ function renderWeek() {
     `${ws.getDate()} ${MOIS_COURT[ws.getMonth()]} – ${we.getDate()} ${MOIS_COURT[we.getMonth()]} ${we.getFullYear()}`;
 
   const today = new Date(); today.setHours(0,0,0,0);
-  const days = Array.from({length:7}, (_,i) => {
-    const d = new Date(ws); d.setDate(ws.getDate()+i); return d;
-  });
-  const HOURS = Array.from({length:17}, (_,i) => i + 6);
+  const days = Array.from({length:7}, (_,i) => { const d = new Date(ws); d.setDate(ws.getDate()+i); return d; });
 
+  // Build header row
   let html = '<div class="week-time-col">';
-  html += '<div class="week-day-head" style="border-left:none"></div>';
-  HOURS.forEach(h => { html += `<div class="week-slot week-time-label">${h}h</div>`; });
+  html += '<div class="week-day-head" style="border-left:none;height:48px"></div>';
+  for (let m = DAY_START; m < DAY_END; m += SLOT_MIN) {
+    const isHour = m % 60 === 0;
+    html += `<div class="week-slot week-time-label${isHour?' hour-start':''}">${isHour ? Math.floor(m/60)+'h' : ''}</div>`;
+  }
   html += '</div>';
 
   days.forEach((d, di) => {
     const isToday = d.toDateString() === today.toDateString();
-    html += `<div class="week-day-col">
-      <div class="week-day-head${isToday?' today-head':''}">${['L','M','M','J','V','S','D'][di]}<br><span style="font-size:15px;font-weight:500">${d.getDate()}</span></div>`;
-    HOURS.forEach(h => {
-      const ev = weekEvents.find(e => e.day === di && e.hour === h);
-      html += `<div class="week-slot">${ev ? `<div class="week-event ${ev.type}" onclick="openEvModal(${weekEvents.indexOf(ev)})" style="cursor:pointer" title="Cliquer pour modifier">${ev.title}</div>` : ''}</div>`;
+    const ds = d.toISOString().slice(0,10);
+
+    // Gather events for this day
+    const dayWEvs = weekEvents.filter(e => e.day === di);
+    const dayCEvs = calEvents.filter(e => e.date === ds && e.color);
+
+    html += `<div class="week-day-col" style="position:relative">
+      <div class="week-day-head${isToday?' today-head':''}" style="height:48px">${['L','M','M','J','V','S','D'][di]}<br><span style="font-size:15px;font-weight:500">${d.getDate()}</span></div>`;
+
+    // Render empty slots
+    for (let m = DAY_START; m < DAY_END; m += SLOT_MIN) {
+      const isHour = m % 60 === 0;
+      html += `<div class="week-slot${isHour?' hour-start':''}"></div>`;
+    }
+
+    // Overlay events as absolutely positioned blocks
+    [...dayWEvs, ...dayCEvs].forEach(ev => {
+      const st = ev.startTime || (ev.hour ? ev.hour * 60 : DAY_START);
+      const et = ev.endTime || (st + 60);
+      if (st >= DAY_END || et <= DAY_START) return;
+      const clampedSt = Math.max(st, DAY_START);
+      const clampedEt = Math.min(et, DAY_END);
+      const topPx = 48 + ((clampedSt - DAY_START) / SLOT_MIN) * 22;
+      const heightPx = Math.max(22, ((clampedEt - clampedSt) / SLOT_MIN) * 22 - 2);
+      const isWeek = weekEvents.includes(ev);
+      const idx = isWeek ? weekEvents.indexOf(ev) : calEvents.indexOf(ev);
+      const onclick = isWeek ? `openEvModal(${idx})` : `openCalEventModal('dated',${idx})`;
+      const style = getEventStyle(ev);
+      const dur = clampedEt - clampedSt;
+      const durLabel = dur >= 60 ? `${Math.floor(dur/60)}h${dur%60>0?dur%60+'min':''}` : `${dur}min`;
+      html += `<div class="week-event" style="${style}top:${topPx}px;height:${heightPx}px;cursor:pointer" onclick="${onclick}" title="${ev.title} · ${fmtTime(st)}–${fmtTime(et)}">
+        <div class="week-event-title">${ev.title}</div>
+        ${heightPx > 30 ? `<div class="week-event-time">${fmtTime(st)}–${fmtTime(et)} · ${durLabel}</div>` : ''}
+      </div>`;
     });
+
     html += '</div>';
   });
 
   document.getElementById('weekGrid').innerHTML = html;
 }
-renderWeek();
 
-function toggleAddEvent() {
-  const f = document.getElementById('addEventForm');
-  f.classList.toggle('open');
+function openCalEventModal(source, idx) {
+  closePopup();
+  const ev = source === 'dated' ? calEvents[idx] : weekEvents[idx];
+  if (!ev) return;
+  evModalIdx = { source, idx };
+  document.getElementById('evEditTitle').value = ev.title;
+
+  // Build time selects
+  const st = ev.startTime || (ev.hour ? ev.hour * 60 : 9 * 60);
+  const et = ev.endTime || (st + 60);
+  buildTimeOptions('evEditStartTime', st);
+  buildTimeOptions('evEditEndTime', et);
+  updateEditDuration();
+
+  editSelectedColor = ev.color || PASTEL_COLORS[0].hex;
+  renderColorPicker('evEditColorPicker', editSelectedColor, onPickerSelect);
+
+  if (source === 'dated') {
+    document.getElementById('evEditDayField').style.display = 'none';
+    document.getElementById('evEditRecurrenceField').style.display = 'none';
+  } else {
+    document.getElementById('evEditDayField').style.display = 'block';
+    document.getElementById('evEditRecurrenceField').style.display = 'block';
+    document.getElementById('evEditDay').value = ev.day;
+    editSelectedRecurrence = ev.recurrence || 'weekly';
+    document.getElementById('editRecBtnWeekly').classList.toggle('active', editSelectedRecurrence === 'weekly');
+    document.getElementById('editRecBtnOnce').classList.toggle('active', editSelectedRecurrence === 'once');
+    document.getElementById('evEditDateField').style.display = 'none';
+  }
+  document.getElementById('evEditModal').classList.add('open');
 }
 
-function addWeekEvent() {
-  const title = document.getElementById('evTitle').value.trim();
-  const day = parseInt(document.getElementById('evDay').value);
-  const hour = parseInt(document.getElementById('evHour').value) || 9;
-  const type = document.getElementById('evType').value;
+function openEvModal(idx) { openCalEventModal('week', idx); }
+
+function closeEvModal() {
+  document.getElementById('evEditModal').classList.remove('open');
+  evModalIdx = null;
+}
+
+function saveEvModal() {
+  if (evModalIdx === null) return;
+  const { source, idx } = evModalIdx;
+  const title = document.getElementById('evEditTitle').value.trim();
+  const startTime = parseInt(document.getElementById('evEditStartTime').value);
+  const endTime = parseInt(document.getElementById('evEditEndTime').value);
+  const color = editSelectedColor;
   if (!title) return;
-  weekEvents.push({ day, hour, title, type });
-  save('weekEvents', weekEvents);
-  document.getElementById('evTitle').value = '';
-  renderWeek();
+  if (endTime <= startTime) { showToast('Heure de fin invalide ⏰'); return; }
+
+  if (source === 'dated') {
+    calEvents[idx] = { ...calEvents[idx], title, startTime, endTime, color, hour: Math.floor(startTime/60) };
+    save('calEvents', calEvents);
+  } else {
+    const day = parseInt(document.getElementById('evEditDay').value);
+    weekEvents[idx] = { ...weekEvents[idx], title, startTime, endTime, color, day, recurrence: editSelectedRecurrence };
+    save('weekEvents', weekEvents);
+  }
+  closeEvModal();
   renderMonth();
+  renderWeek();
+  showToast('Événement modifié ✨');
 }
+
+function deleteEvFromModal() {
+  if (evModalIdx === null) return;
+  const { source, idx } = evModalIdx;
+  if (source === 'dated') { calEvents.splice(idx, 1); save('calEvents', calEvents); }
+  else { weekEvents.splice(idx, 1); save('weekEvents', weekEvents); }
+  closeEvModal();
+  renderMonth();
+  renderWeek();
+  showToast('Événement supprimé 🗑');
+}
+
+// ─── EXPORT / IMPORT ──────────────────────────
+function exportData() {
+  const keys = ['todos','notes','habits','lastHabitDay','streak',
+    'weeklyTasks','lastWkReset','upcoming','calEvents','weekEvents',
+    'journalEntries','horoscope_cache'];
+  const data = {};
+  keys.forEach(k => {
+    const v = localStorage.getItem(k);
+    if (v !== null) data[k] = v;
+  });
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const d = new Date();
+  a.href = url;
+  a.download = `lalia-espace-${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Données sauvegardées 💾');
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      Object.entries(data).forEach(([k, v]) => localStorage.setItem(k, v));
+      showToast('Données restaurées ! Rechargement... 🌸');
+      setTimeout(() => location.reload(), 1500);
+    } catch {
+      showToast('Fichier invalide ⚠️');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ─── INITIAL RENDER (after all functions + constants declared) ────
+renderMonth();
+renderWeek();
 
 // ─── DAY POPUP (monthly view) ─────────────────
 let currentPopup = null;
@@ -1605,18 +1945,20 @@ function openDayPopup(e, dateStr) {
   const JOURS_COURT = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
   const MOIS_COURT2 = ['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
 
-  const typeLabel = { 'ev-sport':'🏃','ev-social':'🌸','ev-perso':'💜','ev-marche':'🛒' };
-
   let html = `<div class="ev-popup-title">📅 <em>${JOURS_COURT[dow]} ${d.getDate()} ${MOIS_COURT2[d.getMonth()]}</em></div>`;
 
   if (dated.length === 0 && recurring.length === 0) {
     html += `<div style="color:var(--text-light);font-size:13px;font-style:italic;padding:4px 0 10px">Aucun événement ce jour</div>`;
   }
 
-  dated.forEach((ev, i) => {
+  dated.forEach((ev) => {
+    const dot = ev.color
+      ? `<span style="width:10px;height:10px;border-radius:50%;background:${ev.color};display:inline-block;flex-shrink:0"></span>`
+      : '<span style="font-size:14px">📌</span>';
     html += `<div class="ev-popup-item">
-      <span style="font-size:16px">${typeLabel[ev.type]||'📌'}</span>
+      ${dot}
       <span class="ev-popup-item-name">${ev.title}</span>
+      ${ev.hour ? `<span class="ev-popup-item-time">${ev.hour}h</span>` : ''}
       <div class="ev-popup-btns">
         <button class="ev-popup-btn" onclick="openCalEventModal('dated',${calEvents.indexOf(ev)})" title="Modifier">✏️</button>
         <button class="ev-popup-btn" onclick="deleteCalEvent('dated',${calEvents.indexOf(ev)})" title="Supprimer">🗑</button>
@@ -1626,8 +1968,11 @@ function openDayPopup(e, dateStr) {
 
   recurring.forEach((ev) => {
     const idx = weekEvents.indexOf(ev);
+    const dot = ev.color
+      ? `<span style="width:10px;height:10px;border-radius:50%;background:${ev.color};display:inline-block;flex-shrink:0"></span>`
+      : '<span style="font-size:14px">🔁</span>';
     html += `<div class="ev-popup-item">
-      <span style="font-size:16px">${typeLabel[ev.type]||'📌'}</span>
+      ${dot}
       <span class="ev-popup-item-name">${ev.title}</span>
       <span class="ev-popup-item-time">${ev.hour}h · hebdo</span>
       <div class="ev-popup-btns">
@@ -1637,13 +1982,12 @@ function openDayPopup(e, dateStr) {
     </div>`;
   });
 
-  html += `<button class="btn-outline ev-popup-add" onclick="prefillAddEvent('${dateStr}', ${dow});closePopup()">+ Ajouter un événement</button>`;
+  html += `<button class="btn-outline ev-popup-add" onclick="prefillAddEvent('${dateStr}',${dow});closePopup()">+ Ajouter un événement</button>`;
 
   const popup = document.createElement('div');
   popup.className = 'ev-popup';
   popup.innerHTML = html;
 
-  // Position near click
   const rect = e.currentTarget.getBoundingClientRect();
   const scrollY = window.scrollY;
   let top = rect.bottom + scrollY + 6;
@@ -1654,7 +1998,6 @@ function openDayPopup(e, dateStr) {
   document.body.appendChild(popup);
   currentPopup = popup;
 
-  // Overlay to close
   const ov = document.createElement('div');
   ov.id = 'popupOverlay';
   ov.className = 'ev-popup-overlay';
@@ -1663,92 +2006,26 @@ function openDayPopup(e, dateStr) {
 }
 
 function prefillAddEvent(dateStr, dow) {
-  // Switch to week view and open add form
   document.querySelectorAll('.cal-view').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.cal-tab').forEach(c => c.classList.remove('active'));
   document.getElementById('cal-week').classList.add('active');
   document.querySelectorAll('.cal-tab')[1].classList.add('active');
   renderWeek();
   document.getElementById('evDay').value = dow;
-  document.getElementById('addEventForm').classList.add('open');
+  toggleAddEvent();
   document.getElementById('evTitle').focus();
 }
 
 function deleteCalEvent(source, idx) {
-  if (source === 'dated') {
-    calEvents.splice(idx, 1);
-    save('calEvents', calEvents);
-  } else {
-    weekEvents.splice(idx, 1);
-    save('weekEvents', weekEvents);
-  }
-  closePopup();
-  renderMonth();
-  renderWeek();
-  showToast('Événement supprimé 🗑');
-}
-
-function openCalEventModal(source, idx) {
-  closePopup();
-  const ev = source === 'dated' ? calEvents[idx] : weekEvents[idx];
-  if (!ev) return;
-  evModalIdx = { source, idx };
-  document.getElementById('evEditTitle').value = ev.title;
-  document.getElementById('evEditHour').value = ev.hour || '';
-  document.getElementById('evEditType').value = ev.type;
-  if (source === 'dated') {
-    // For dated events, day selector is irrelevant — hide it
-    document.getElementById('evEditDay').parentElement.parentElement.style.display = 'none';
-  } else {
-    document.getElementById('evEditDay').parentElement.parentElement.style.display = 'flex';
-    document.getElementById('evEditDay').value = ev.day;
-  }
-  document.getElementById('evEditModal').classList.add('open');
-}
-
-// ─── EVENT EDIT MODAL ─────────────────────────
-function openEvModal(idx) {
-  openCalEventModal('week', idx);
-}
-
-function closeEvModal() {
-  document.getElementById('evEditModal').classList.remove('open');
-  evModalIdx = null;
-}
-
-function saveEvModal() {
-  if (evModalIdx === null) return;
-  const { source, idx } = evModalIdx;
-  const title = document.getElementById('evEditTitle').value.trim();
-  const hour = parseInt(document.getElementById('evEditHour').value) || 9;
-  const type = document.getElementById('evEditType').value;
-  if (!title) return;
-
-  if (source === 'dated') {
-    calEvents[idx].title = title;
-    calEvents[idx].type = type;
-    save('calEvents', calEvents);
-  } else {
-    const day = parseInt(document.getElementById('evEditDay').value);
-    weekEvents[idx] = { ...weekEvents[idx], title, hour, type, day };
-    save('weekEvents', weekEvents);
-  }
-  closeEvModal();
-  renderMonth();
-  renderWeek();
-  showToast('Événement modifié ✨');
-}
-
-function deleteEvFromModal() {
-  if (evModalIdx === null) return;
-  const { source, idx } = evModalIdx;
   if (source === 'dated') { calEvents.splice(idx, 1); save('calEvents', calEvents); }
   else { weekEvents.splice(idx, 1); save('weekEvents', weekEvents); }
-  closeEvModal();
+  closePopup();
   renderMonth();
   renderWeek();
   showToast('Événement supprimé 🗑');
 }
+
+// ─── NOTES ────────────────────────────────────
 let notes = load('notes', [
   { id: 1, title: 'Idées de week-end', body: 'Marché le samedi matin ☀️\nBalade en forêt...\n', date: '21 mars 2026' }
 ]);
