@@ -900,7 +900,6 @@ function initPlanning(){buildWeekGrid();updatePlanning();setInterval(updatePlann
 
 // FIREBASE
 async function startListeners(){
-  // Retourne une promise pour permettre .then() dans goModule
   try{
     setSyncState("syncing");
     const[ms,ns]=await Promise.all([getDocs(collection(db,"modules")),getDocs(collection(db,"notes"))]);
@@ -961,7 +960,7 @@ function renderHome(){
     // Skeletons pendant le chargement Firebase
     for(let i=0;i<4;i++){
       const sk=document.createElement("div");sk.className="skeleton";sk.style.minHeight="115px";
-      sk.innerHTML="<div class="sk-line" style="width:40%;height:18px;margin-bottom:12px"></div><div class="sk-line sm"></div><div class="sk-line xs"></div>";
+      sk.innerHTML='<div class="sk-line" style="width:40%;height:18px;margin-bottom:12px"></div><div class="sk-line sm"></div><div class="sk-line xs"></div>';
       g.appendChild(sk);
     }
     return;
@@ -1010,8 +1009,6 @@ function goModule(mid){
   setBreadcrumb("mod-breadcrumb",[{label:"Accueil",action:goHome},{label:m.label}]);
   showPage("page-module");
   if(!notes.length) showSkeletons(6); else renderCards();
-  // Refresh depuis Firebase si données vieilles
-  startListeners().then(()=>renderCards());
 }
 function getSorted(arr){
   const s=$("sort-select").value,copy=[...arr];
